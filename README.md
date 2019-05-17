@@ -15,18 +15,14 @@ struct mach_header {
 };
 
 struct mach_header_64 {
-    uint32_t    magic;        /* mach magic number identifier */
-    cpu_type_t    cputype;    /* cpu specifier */
+    uint32_t    magic;              /* mach magic number identifier */
+    cpu_type_t    cputype;          /* cpu specifier */
     cpu_subtype_t    cpusubtype;    /* machine specifier */
-    uint32_t    filetype;    /* type of file */
-    uint32_t    ncmds;        /* number of load commands */
-    uint32_t    sizeofcmds;    /* the size of all the load commands */
-    uint32_t    flags;        /* flags */
-    uint32_t    reserved;    /* reserved */
+    uint32_t    filetype;           /* type of file */
+    uint32_t    ncmds;              /* number of load commands */
+    uint32_t    sizeofcmds;         /* the size of all the load commands */
+    uint32_t    flags;              /* flags */
+    uint32_t    reserved;           /* reserved */
 };
 
-作者：liuyuxuan123
-链接：https://juejin.im/post/5cc2ad1a5188252e7f08ed4e
-来源：掘金
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
