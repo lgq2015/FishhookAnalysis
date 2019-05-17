@@ -14,6 +14,8 @@
 		31A6CE8922789B46007BBEDA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31A6CE8722789B46007BBEDA /* LaunchScreen.storyboard */; };
 		31A6CE8C22789B46007BBEDA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A6CE8B22789B46007BBEDA /* main.m */; };
 		31A6CE9422789B85007BBEDA /* fishhook.c in Sources */ = {isa = PBXBuildFile; fileRef = 31A6CE9222789B85007BBEDA /* fishhook.c */; };
+		31ED3F40228F276A000DF212 /* fishhook.png in Resources */ = {isa = PBXBuildFile; fileRef = 31ED3F3F228F276A000DF212 /* fishhook.png */; };
+		31ED3F42228F27FC000DF212 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 31ED3F41228F27FC000DF212 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		31A6CE8B22789B46007BBEDA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		31A6CE9222789B85007BBEDA /* fishhook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fishhook.c; sourceTree = "<group>"; };
 		31A6CE9322789B85007BBEDA /* fishhook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fishhook.h; sourceTree = "<group>"; };
+		31ED3F3F228F276A000DF212 /* fishhook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fishhook.png; sourceTree = "<group>"; };
+		31ED3F41228F27FC000DF212 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +49,7 @@
 		31A6CE7022789B42007BBEDA = {
 			isa = PBXGroup;
 			children = (
+				31ED3F41228F27FC000DF212 /* README.md */,
 				31A6CE7B22789B42007BBEDA /* FishhookAnalysis */,
 				31A6CE7A22789B42007BBEDA /* Products */,
 			);
@@ -61,6 +66,7 @@
 		31A6CE7B22789B42007BBEDA /* FishhookAnalysis */ = {
 			isa = PBXGroup;
 			children = (
+				31ED3F3E228F274D000DF212 /* images */,
 				31A6CE9222789B85007BBEDA /* fishhook.c */,
 				31A6CE9322789B85007BBEDA /* fishhook.h */,
 				31A6CE7C22789B42007BBEDA /* AppDelegate.h */,
@@ -74,6 +80,14 @@
 				31A6CE8B22789B46007BBEDA /* main.m */,
 			);
 			path = FishhookAnalysis;
+			sourceTree = "<group>";
+		};
+		31ED3F3E228F274D000DF212 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				31ED3F3F228F276A000DF212 /* fishhook.png */,
+			);
+			path = images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,7 +147,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31ED3F40228F276A000DF212 /* fishhook.png in Resources */,
 				31A6CE8922789B46007BBEDA /* LaunchScreen.storyboard in Resources */,
+				31ED3F42228F27FC000DF212 /* README.md in Resources */,
 				31A6CE8622789B46007BBEDA /* Assets.xcassets in Resources */,
 				31A6CE8422789B42007BBEDA /* Main.storyboard in Resources */,
 			);
