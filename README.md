@@ -63,3 +63,33 @@ struct segment_command_64 {         /* for 64-bit architectures */
     uint32_t    flags;              /* flags */
 };
 ```
+```
+struct section {                    /* for 32-bit architectures */
+    char        sectname[16];       /* name of this section */               /*节的名字*/
+    char        segname[16];        /* segment this section goes in */       /*节所在段名*/
+    unsigned long    addr;          /* memory address of this section */     /*节所在地址*/
+    unsigned long    size;          /* size in bytes of this section */      /*节的大小*/
+    unsigned long    offset;        /* file offset of this section */        /*节的文件偏移*/
+    unsigned long    align;         /* section alignment (power of 2) */     /*节的对齐*/
+    unsigned long    reloff;        /* file offset of relocation entries */  //
+    unsigned long    nreloc;        /* number of relocation entries */       //
+    unsigned long    flags;         /* flags (section type and attributes)*/ //
+    unsigned long    reserved1;     /* reserved */
+    unsigned long    reserved2;     /* reserved */
+};
+
+struct section_64 {                 /* for 64-bit architectures */
+    char        sectname[16];       /* name of this section */
+    char        segname[16];        /* segment this section goes in */
+    uint64_t    addr;               /* memory address of this section */
+    uint64_t    size;               /* size in bytes of this section */
+    uint32_t    offset;             /* file offset of this section */
+    uint32_t    align;              /* section alignment (power of 2) */
+    uint32_t    reloff;             /* file offset of relocation entries */
+    uint32_t    nreloc;             /* number of relocation entries */
+    uint32_t    flags;              /* flags (section type and attributes)*/
+    uint32_t    reserved1;          /* reserved (for offset or index) */
+    uint32_t    reserved2;          /* reserved (for count or sizeof) */
+    uint32_t    reserved3;          /* reserved */
+};
+```
