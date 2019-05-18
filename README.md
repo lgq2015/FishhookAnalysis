@@ -26,3 +26,26 @@ struct mach_header_64 {
 };
 
 ```
+
+
+```
+struct load_command {
+    unsigned long cmd;              /* type of load command */             /*加载指令类型*/  
+    unsigned long cmdsize;          /* total size of command in bytes */   /*加载指令大小*/
+};
+```
+```
+struct segment_command {            /* for 32-bit architectures */
+    unsigned long    cmd;           /* LC_SEGMENT */
+    unsigned long    cmdsize;       /* includes sizeof section structs */
+    char        segname[16];        /* segment name */                    /*段名 __TEXT, __DATA, __LINKEDIT*/
+    unsigned long    vmaddr;        /* memory address of this segment */  /*段虚拟地址*/
+    unsigned long    vmsize;        /* memory size of this segment */     /*段大小*/
+    unsigned long    fileoff;       /* file offset of this segment */     /**/
+    unsigned long    filesize;      /* amount to map from the file */
+    vm_prot_t    maxprot;           /* maximum VM protection */
+    vm_prot_t    initprot;          /* initial VM protection */
+    unsigned long    nsects;        /* number of sections in segment */   /*段的节数*/
+    unsigned long    flags;         /* flags */                           /*段的标识位*/       
+};
+```
