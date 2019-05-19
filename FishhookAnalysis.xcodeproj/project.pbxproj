@@ -16,6 +16,7 @@
 		31A6CE9422789B85007BBEDA /* fishhook.c in Sources */ = {isa = PBXBuildFile; fileRef = 31A6CE9222789B85007BBEDA /* fishhook.c */; };
 		31ED3F40228F276A000DF212 /* fishhook.png in Resources */ = {isa = PBXBuildFile; fileRef = 31ED3F3F228F276A000DF212 /* fishhook.png */; };
 		31ED3F42228F27FC000DF212 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 31ED3F41228F27FC000DF212 /* README.md */; };
+		31ED3F44229133D5000DF212 /* macho_header.png in Resources */ = {isa = PBXBuildFile; fileRef = 31ED3F43229133D5000DF212 /* macho_header.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		31A6CE9322789B85007BBEDA /* fishhook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fishhook.h; sourceTree = "<group>"; };
 		31ED3F3F228F276A000DF212 /* fishhook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fishhook.png; sourceTree = "<group>"; };
 		31ED3F41228F27FC000DF212 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		31ED3F43229133D5000DF212 /* macho_header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = macho_header.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 		31ED3F3E228F274D000DF212 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				31ED3F43229133D5000DF212 /* macho_header.png */,
 				31ED3F3F228F276A000DF212 /* fishhook.png */,
 			);
 			path = images;
@@ -152,6 +155,7 @@
 				31ED3F42228F27FC000DF212 /* README.md in Resources */,
 				31A6CE8622789B46007BBEDA /* Assets.xcassets in Resources */,
 				31A6CE8422789B42007BBEDA /* Main.storyboard in Resources */,
+				31ED3F44229133D5000DF212 /* macho_header.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
