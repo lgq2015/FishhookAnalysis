@@ -1,9 +1,12 @@
 
 ```
-/*
-* The mach header appears at the very beginning of the object file; it
-* is the same for both 32-bit and 64-bit architectures.
-*/
+    Mach-O不像XML / YAML / JSON 这样的特殊格式，它只是一个以有意义的数据块分组的二进制字节流。这些块包含元信息，例如：字节顺序，cpu类型，块的大小等。
+    
+    典型的Mach-O文件由三个段组成：
+    1. 标题 - 包含有关二进制文件的一般信息：字节顺序（魔数），cpu类型，加载命令数量等。
+    2. 加载命令 - 它是一种目录，描述了段的位置，符号表，动态符号表等。每个加载命令都包含一个元信息，如命令类型，名称，二进制位置等等。
+    3. 数据 - 通常是目标文件的最大部分。 它包含代码和数据，例如符号表，动态符号表等。
+
 struct mach_header {
     uint32_t    magic;              /* mach magic number identifier */      /*魔数*/
     cpu_type_t    cputype;          /* cpu specifier */                     /*CPU类型*/
