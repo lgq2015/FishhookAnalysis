@@ -6,7 +6,7 @@ Mach-O不像XML / YAML / JSON 这样的特殊格式，它只是一个以有意�
 1. `标题`: 包含有关二进制文件的一般信息：字节顺序（魔数），cpu类型，加载命令数量等。
 2. `加载命令`: 它是一种目录，描述了段的位置，符号表，动态符号表等。每个加载命令都包含一个元信息，如命令类型，名称，二进制位置等等。
 3. `数据`: 通常是目标文件的最大部分。 它包含代码和数据，例如符号表，动态符号表等。
-<img src="FishhookAnalysis/images/macho_header.png)" alt="drawing" width="200" />
+<img src="FishhookAnalysis/images/macho_header.png" alt="drawing" width="200" />
 
 ```
 struct mach_header {
