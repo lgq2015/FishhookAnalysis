@@ -34,7 +34,7 @@ struct mach_header_64 {
 };
 
 ```
-
+<p align="center"><img src="FishhookAnalysis/images/header.png" alt="drawing" /></p>
 
 ```
 struct load_command {
@@ -71,6 +71,10 @@ struct segment_command_64 {         /* for 64-bit architectures */
     uint32_t    flags;              /* flags */
 };
 ```
+
+<p align="center"><img src="FishhookAnalysis/images/load_command.png" alt="drawing" /></p>
+<p align="center"><img src="FishhookAnalysis/images/load_section.png" alt="drawing" /></p>
+
 ```
 struct section {                    /* for 32-bit architectures */
     char        sectname[16];       /* name of this section */               /*节的名字*/
