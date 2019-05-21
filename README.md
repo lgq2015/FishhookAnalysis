@@ -109,3 +109,6 @@ struct section_64 {                 /* for 64-bit architectures */
 ```
 <p align="center"><img src="FishhookAnalysis/images/section.png" alt="drawing" /></p>
 
+
+
+<p align="center"><img src="FishhookAnalysis/images/fishhook.png" alt="drawing" width="500"/></p>
