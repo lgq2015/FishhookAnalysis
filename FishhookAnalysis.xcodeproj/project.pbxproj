@@ -16,6 +16,10 @@
 		31A6CE9422789B85007BBEDA /* fishhook.c in Sources */ = {isa = PBXBuildFile; fileRef = 31A6CE9222789B85007BBEDA /* fishhook.c */; };
 		31B069FD2293394E004B9DB5 /* RUNTIME.md in Resources */ = {isa = PBXBuildFile; fileRef = 31B069FC2293394E004B9DB5 /* RUNTIME.md */; };
 		31B069FF22933CBD004B9DB5 /* macho_memory_layout.png in Resources */ = {isa = PBXBuildFile; fileRef = 31B069FE22933CBD004B9DB5 /* macho_memory_layout.png */; };
+		31B06A012293DADA004B9DB5 /* load_command.png in Resources */ = {isa = PBXBuildFile; fileRef = 31B06A002293DADA004B9DB5 /* load_command.png */; };
+		31B06A032293DB17004B9DB5 /* load_section.png in Resources */ = {isa = PBXBuildFile; fileRef = 31B06A022293DB17004B9DB5 /* load_section.png */; };
+		31B06A052293DB8D004B9DB5 /* header.png in Resources */ = {isa = PBXBuildFile; fileRef = 31B06A042293DB8D004B9DB5 /* header.png */; };
+		31B06A072293DB9E004B9DB5 /* section.png in Resources */ = {isa = PBXBuildFile; fileRef = 31B06A062293DB9E004B9DB5 /* section.png */; };
 		31ED3F40228F276A000DF212 /* fishhook.png in Resources */ = {isa = PBXBuildFile; fileRef = 31ED3F3F228F276A000DF212 /* fishhook.png */; };
 		31ED3F42228F27FC000DF212 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 31ED3F41228F27FC000DF212 /* README.md */; };
 		31ED3F44229133D5000DF212 /* macho_header.png in Resources */ = {isa = PBXBuildFile; fileRef = 31ED3F43229133D5000DF212 /* macho_header.png */; };
@@ -36,6 +40,10 @@
 		31A6CE9322789B85007BBEDA /* fishhook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fishhook.h; sourceTree = "<group>"; };
 		31B069FC2293394E004B9DB5 /* RUNTIME.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = RUNTIME.md; sourceTree = "<group>"; };
 		31B069FE22933CBD004B9DB5 /* macho_memory_layout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = macho_memory_layout.png; sourceTree = "<group>"; };
+		31B06A002293DADA004B9DB5 /* load_command.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = load_command.png; sourceTree = "<group>"; };
+		31B06A022293DB17004B9DB5 /* load_section.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = load_section.png; sourceTree = "<group>"; };
+		31B06A042293DB8D004B9DB5 /* header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header.png; sourceTree = "<group>"; };
+		31B06A062293DB9E004B9DB5 /* section.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = section.png; sourceTree = "<group>"; };
 		31ED3F3F228F276A000DF212 /* fishhook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fishhook.png; sourceTree = "<group>"; };
 		31ED3F41228F27FC000DF212 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		31ED3F43229133D5000DF212 /* macho_header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = macho_header.png; sourceTree = "<group>"; };
@@ -94,6 +102,10 @@
 			children = (
 				31ED3F43229133D5000DF212 /* macho_header.png */,
 				31B069FE22933CBD004B9DB5 /* macho_memory_layout.png */,
+				31B06A042293DB8D004B9DB5 /* header.png */,
+				31B06A002293DADA004B9DB5 /* load_command.png */,
+				31B06A022293DB17004B9DB5 /* load_section.png */,
+				31B06A062293DB9E004B9DB5 /* section.png */,
 				31ED3F3F228F276A000DF212 /* fishhook.png */,
 			);
 			path = images;
@@ -157,10 +169,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				31ED3F40228F276A000DF212 /* fishhook.png in Resources */,
+				31B06A072293DB9E004B9DB5 /* section.png in Resources */,
+				31B06A012293DADA004B9DB5 /* load_command.png in Resources */,
 				31A6CE8922789B46007BBEDA /* LaunchScreen.storyboard in Resources */,
 				31ED3F42228F27FC000DF212 /* README.md in Resources */,
 				31A6CE8622789B46007BBEDA /* Assets.xcassets in Resources */,
 				31A6CE8422789B42007BBEDA /* Main.storyboard in Resources */,
+				31B06A032293DB17004B9DB5 /* load_section.png in Resources */,
+				31B06A052293DB8D004B9DB5 /* header.png in Resources */,
 				31ED3F44229133D5000DF212 /* macho_header.png in Resources */,
 				31B069FD2293394E004B9DB5 /* RUNTIME.md in Resources */,
 				31B069FF22933CBD004B9DB5 /* macho_memory_layout.png in Resources */,
