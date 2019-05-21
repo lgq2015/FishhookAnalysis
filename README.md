@@ -123,8 +123,17 @@ struct section_64 {                 /* for 64-bit architectures */
 我们经常说符号，其实 _DATA 段中建立的指针就是符号。fishhook的原理其实就是，将指向`系统方法`（即外部函数）的符号`重新进行绑定指向内部的函数`。这样就把系统方法与自己定义的方法进行了交换。这也就是为什么C的内部函数修改不了，自定义的函数修改不了，只能修改 Mach-O 外部的函数。
 
 接下来我们以 NSLog 为例，看 fishhook 是如何通过修改懒加载和非懒加载两个表的指针达到C函数HOOK的目的。NSLog是系统函数所以是在懒加载表中的。那么，我们如何找到 NSLog 的符号表呢？公式如下：
-**`NSLog 懒加载符号表在内存中的地址 = Mach-O 在内存中的偏移地址 + NSLog懒加载符号表在Mach-O 的偏移地址`**
+**`NSLog 懒加载符号表在内存中的地址 = Mach-O 在内存中的偏移地址 + NSLog懒加载符号表在Mach-O的偏移地址`**
 
 1. `ASLR` 是 Address Space Layout Randomization 的缩写，这个概念并非苹果原创。由于 `vmaddr` (虚拟地址) 是DYLD链接的时候写入 Mach-O 文件的，对于一个程序来说是静态不变的，因此给黑客攻击带来了便利，iOS 4.3 以后引入了 ASLR，给每个镜像在 vmaddr 的基础上再加一个随机的偏移量 `slide`，因此每段数据的真实的虚拟地址是 vmaddr + slide。获取这个slide的方式是调用`dlfcn`库的: `_dyld_get_image_vmaddr_slide(i)`, 获取镜像的起始位置也要调用`dlfcn`库的:   `_dyld_get_image_header(i)`
+2. 
+
+
+
+
+
+DYLD通过更新MachO文件中二进制__DATA段的特定部分中的指针来绑定惰性和非惰性符号。Fishhook通过确定传递给重新绑定符号的每个符号名称的更新位置，然后写出相应的替换，重新绑定这些符号。
+
+对于给定的镜像，__DATA可能包含与动态符号绑定相关的两个部分：__nl_symbol_ptr和 __la_symbol_ptr。__nl_symbol_ptr是指向非延迟绑定数据的指针数组（这些指针在加载库时绑定），而__la_symbol_ptr是指向导入函数的指针数组，导入函数通常在第一次调用该符号时由名为dyld_stub_binder的例程填充（也可以告诉DYLD在启动时绑定这些指针)。为了找到对应于这些部分中某个特定位置的符号的名称，我们必须跳过几个间接层。对于这两个相关部分，section header提供了一个偏移量（在reserved1字段中），这个偏移量到所谓的`间接符号表`。间接符号表位于二进制文件的__LINKEDIT段中，它只是`符号表`（也在__LINKEDIT中）的索引数组，其顺序与非惰性和惰性符号段中指针的顺序相同。因此，给定结构节__nl_symbol_ptr，该节第一个地址的符号表中的对应索引是间接的`_symbol_table[nl_symbol_ptr->reserved1]`。符号表本身是一个结构nlist数组，每个nlist都包含一个到字符串表的索引，该表存储了实际符号名。因此，对于每个指针，我们可以找到相应的符号，然后找到相应的字符串来与请求的符号名进行比较，如果匹配，我们将用替换来替换节中的指针。
 
 <p align="center"><img src="FishhookAnalysis/images/fishhook.png" alt="drawing" width="500"/></p>
