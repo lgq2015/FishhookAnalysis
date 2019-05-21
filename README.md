@@ -8,6 +8,8 @@ Mach-O不像XML / YAML / JSON 这样的特殊格式，它只是一个以有意�
 3. `数据`: 通常是目标文件的最大部分。 它包含代码和数据，例如符号表，动态符号表等。
 OS X上有两种类型的目标文件：Mach-O文件和通用二进制文件，也就是所谓的Fat文件。 它们之间的区别：Mach-O文件包含一个体系结构（i386，x86_64，arm64等）的目标代码，而Fat二进制文件可能包含多个目标文件，因此包含不同体系结构的对象代码（i386和x86_64，arm和arm64， 等等。）
 <p align="center"><img src="FishhookAnalysis/images/macho_header.png" alt="drawing" width="200" /></p>
+我们可以从这一张图来简单的理解一下。
+<p align="center"><img src="FishhookAnalysis/images/macho_memory_layout.png" alt="drawing" /></p>
 
 
 
@@ -105,6 +107,5 @@ struct section_64 {                 /* for 64-bit architectures */
     uint32_t    reserved3;          /* reserved */
 };
 ```
-
-<p align="center"><img src="FishhookAnalysis/images/macho_memory_layout.png" alt="drawing" /></p>
+<p align="center"><img src="FishhookAnalysis/images/section.png" alt="drawing" /></p>
 
