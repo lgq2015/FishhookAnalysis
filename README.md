@@ -125,9 +125,6 @@ struct section_64 {                 /* for 64-bit architectures */
 接下来我们以 NSLog 为例，看 fishhook 是如何通过修改懒加载和非懒加载两个表的指针达到C函数HOOK的目的。NSLog是系统函数所以是在懒加载表中的。那么，我们如何找到 NSLog 的符号表呢？公式如下：
 **`NSLog 懒加载符号表在内存中的地址 = Mach-O 在内存中的偏移地址 + NSLog懒加载符号表在Mach-O 的偏移地址`**
 
-1. `ASLR` 是 Address Space Layout Randomization 的缩写，这个概念并非苹果原创。由于 `vmaddr` (虚拟地址) 是DYLD链接的时候写入 Mach-O 文件的，对于一个程序来说是静态不变的，因此给黑客攻击带来了便利，iOS 4.3 以后引入了 ASLR，给每个镜像在 vmaddr 的基础上再加一个随机的偏移量 `slide`，因此每段数据的真实的虚拟地址是 vmaddr + slide。获取这个slide的方式是调用`dlfcn`库的:  
-                                        `_dyld_get_image_vmaddr_slide(i)`
-                                        获取镜像的起始位置也要调用`dlfcn`库的:   
-                                        `_dyld_get_image_header(i)`
+1. `ASLR` 是 Address Space Layout Randomization 的缩写，这个概念并非苹果原创。由于 `vmaddr` (虚拟地址) 是DYLD链接的时候写入 Mach-O 文件的，对于一个程序来说是静态不变的，因此给黑客攻击带来了便利，iOS 4.3 以后引入了 ASLR，给每个镜像在 vmaddr 的基础上再加一个随机的偏移量 `slide`，因此每段数据的真实的虚拟地址是 vmaddr + slide。获取这个slide的方式是调用`dlfcn`库的: `_dyld_get_image_vmaddr_slide(i)`, 获取镜像的起始位置也要调用`dlfcn`库的:   `_dyld_get_image_header(i)`
 
 <p align="center"><img src="FishhookAnalysis/images/fishhook.png" alt="drawing" width="500"/></p>
