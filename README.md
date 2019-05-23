@@ -128,26 +128,45 @@ struct section_64 {                 /* for 64-bit architectures */
 1. `ASLR` 是 Address Space Layout Randomization 的缩写，这个概念并非苹果原创。由于 `vmaddr` (虚拟地址) 是DYLD链接的时候写入 Mach-O 文件的，对于一个程序来说是静态不变的，因此给黑客攻击带来了便利，iOS 4.3 以后引入了 ASLR，给每个镜像在 vmaddr 的基础上再加一个随机的偏移量 `slide`，因此每段数据的真实的虚拟地址是 vmaddr + slide。获取这个slide的方式是调用`dlfcn`库的: `_dyld_get_image_vmaddr_slide(i)`, 获取镜像的起始位置也要调用`dlfcn`库的:   `_dyld_get_image_header(i)`
 2. 
 
+## 两个重要的结构体和接口
 
-## 两个重要的结构体
 ```
 struct rebinding {
-    const char *name;               // 被重新绑定的函数名称
-    void *replacement;              // 用来替换原函数的函数指针
-    void **replaced;                // 被替换的函数保存在这个指针中
+const char *name;               // 需要Hook的函数名称
+void *replacement;              // 新函数的函数指针（地址）
+void **replaced;                // 原函数地址的指针（用来保存原函数）
 };
 ```
 
 ```
 struct rebindings_entry {
-    struct rebinding *rebindings;   // Hook信息(因为可以同时Hook多个函数)
-    size_t rebindings_nel;          // Hook数量
-    struct rebindings_entry *next;  // 下一个Hook 入口
+struct rebinding *rebindings;   // Hook信息(因为可以同时Hook多个函数)
+size_t rebindings_nel;          // Hook数量
+struct rebindings_entry *next;  // 下一个Hook 入口
 };
 static struct rebindings_entry *_rebindings_head;
 ```
 其中值得注意的是 `rebinding_entry` 在`fishhook.c`文件中被定义为静态变量，只在它的源文件中可以访问。
 这样可以通过判断 _rebindings_head->next 的值来判断是否为第一次调用，然后使用 `_dyld_register_func_for_add_image` 将 `_rebind_symbols_for_image` 注册为回调
+```
+int rebind_symbols(struct rebinding rebindings[], size_t rebindings_nel);
+```
+其中：
+`rebindings`: 存放`rebingding`结构体的数组，fishhook可以同时交换多个函数。
+`rebindings_nel`:  存放 `rebingdings`数组的长度。
+
+
+
+
+在 dyld 加载镜像时，会执行注册过的回调函数；当然，我们也可以使用下面的方法注册自定义的回调函数，同时也会为所有已经加载的镜像执行回调：
+```
+extern void _dyld_register_func_for_add_image(
+    void (*func)(const struct mach_header* mh, intptr_t vmaddr_slide)
+);
+```
+
+对于每一个已经存在的镜像，当它被动态链接时，都会执行回调 `void (*func)(const struct mach_header* mh, intptr_t vmaddr_slide)`，传入文件的 mach_header 以及一个虚拟内存地址 intptr_t。
+
 
 这部分的代码主要功能是从镜像中查找 `linkedit_segment` , `symtab_command` 和 `dysymtab_command`。 在开始查找之前，要先跳过 `mach_header_t`长度的位置，也就是跳过这个镜像的头(header)，然后将当前指针强转成 `segment_command_t`(这个segment_command_t就是segment_command_64或者segment_command)，通过对比 cmd 的值，来找到需要的 segment_command_t。
 在查找了几个关键的 segment 之后，我们可以根据几个 segment 获取对应表的内存地址：
