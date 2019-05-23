@@ -149,13 +149,18 @@ static struct rebindings_entry *_rebindings_head;
 其中值得注意的是 `rebinding_entry` 在`fishhook.c`文件中被定义为静态变量，只在它的源文件中可以访问。
 这样可以通过判断 _rebindings_head->next 的值来判断是否为第一次调用，然后使用 `_dyld_register_func_for_add_image` 将 `_rebind_symbols_for_image` 注册为回调
 ```
-int rebind_symbols(struct rebinding rebindings[], size_t rebindings_nel);
+    int rebind_symbols(struct rebinding rebindings[], size_t rebindings_nel);
 ```
 其中：
 
 ✸.  `rebindings`: 存放`rebingding`结构体的数组，fishhook可以同时交换多个函数。
 
 ✸. `rebindings_nel`:  存放 `rebingdings`数组的长度。
+
+如果要Hook的函数很少，我们可以采取这一种写法：
+```
+    rebind_symbols({{ "func", newFunc, (void**)&oldFunc }}, 1);
+```
 
 
 
