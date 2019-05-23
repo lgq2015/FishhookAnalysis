@@ -152,6 +152,7 @@ static struct rebindings_entry *_rebindings_head;
 int rebind_symbols(struct rebinding rebindings[], size_t rebindings_nel);
 ```
 其中：
+
 `rebindings`: 存放`rebingding`结构体的数组，fishhook可以同时交换多个函数。
 
 `rebindings_nel`:  存放 `rebingdings`数组的长度。
