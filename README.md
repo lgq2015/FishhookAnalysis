@@ -113,7 +113,7 @@ struct section_64 {                 /* for 64-bit architectures */
 
 ## 那么我们如何在 Mach-O 文件里找到系统的函数地址呢？或者说 Mach-O 文件是如何链接外部函数的呢？
 
-我们程序的底层都是汇编，汇编代码都是写死的内存地址，并且保存在__TEXT段。我们该怎么找呢？而且系统的动态库在内存里面的地址是不固定的，每次启动程序的时候地址都是随机的。 苹果为了能在 Mach-O 文件中访问外部函数，采用了一个技术，叫做PIC（位置代码独立）技术。当你的应用程序想要调用 Mach-O 文件外部的函数的时候，或者说如果 Mach-O 内部需要调用系统的库函数时，Mach-O 文件会：
+我们程序的底层都是汇编，汇编代码都是写死的内存地址，并且保存在`__TEXT`段。我们该怎么找呢？而且系统的动态库在内存里面的地址是不固定的，每次启动程序的时候地址都是随机的。 苹果为了能在 Mach-O 文件中访问外部函数，采用了一个技术，叫做PIC（位置代码独立）技术。当你的应用程序想要调用 Mach-O 文件外部的函数的时候，或者说如果 Mach-O 内部需要调用系统的库函数时，Mach-O 文件会：
 1. 先在 Mach-O 文件的 _DATA 段中建立一个指针（空指针），这个指针变量指向外部函数。
 2. 然后DYLD 会动态的进行绑定，将 Mach-O 中的 _DATA 段中的指针，指向外部函数。
 
@@ -127,7 +127,7 @@ struct section_64 {                 /* for 64-bit architectures */
 接下来我们以 NSLog 为例，看 fishhook 是如何通过修改懒加载和非懒加载两个表的指针达到C函数HOOK的目的。NSLog是系统函数所以是在懒加载表中的。那么，我们如何找到 NSLog 的符号表呢？公式如下：
 **`NSLog 懒加载符号表在内存中的地址 = Mach-O 在内存中的偏移地址 + NSLog懒加载符号表在Mach-O的偏移地址`**
 
-1. `ASLR` 是 Address Space Layout Randomization 的缩写，这个概念并非苹果原创。由于 `vmaddr` (虚拟地址) 是DYLD链接的时候写入 Mach-O 文件的，对于一个程序来说是静态不变的，因此给黑客攻击带来了便利，iOS 4.3 以后引入了 ASLR，给每个镜像在 vmaddr 的基础上再加一个随机的偏移量 `slide`，因此每段数据的真实的虚拟地址是 vmaddr + slide。获取这个slide的方式是调用`dlfcn`库的: `_dyld_get_image_vmaddr_slide(i)`, 获取镜像的起始位置也要调用`dlfcn`库的:   `_dyld_get_image_header(i)`
+1. `ASLR` 是 *Address Space Layout Randomization* 的缩写，中文翻译为地址空间布局随机化，这个概念并非苹果原创。在早期的版本中 `Mach-O`文件 被`DYLD`加载到内存中的地址对于一个程序来说是静态不变的，这种原始的加载方案给黑客攻击带来了便利，所以iOS 4.3 以后引入了 `ASLR`，即给每个镜像在在被`DYLD`加载进入内存时加一个随机的偏移量 `slide`。获取这个slide的方式是调用`dlfcn`库的: `_dyld_get_image_vmaddr_slide(i)`, 获取镜像的起始位置也要调用`dlfcn`库的:   `_dyld_get_image_header(i)`
 2. 
 
 ## 两个重要的结构体和接口
