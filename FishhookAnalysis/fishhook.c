@@ -174,10 +174,8 @@ static void rebind_symbols_for_image(struct rebindings_entry *rebindings,
     }
 }
 
-static int count = 0;
 static void _rebind_symbols_for_image(const struct mach_header *header,
                                       intptr_t slide) {
-    printf("%d\n", count ++);
     rebind_symbols_for_image(_rebindings_head, header, slide);
 }
 

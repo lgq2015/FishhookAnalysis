@@ -6,6 +6,7 @@
 //  Copyright © 2019 yuxuanliu. All rights reserved.
 //
 
+#include <mach-o/dyld.h>
 #import "ViewController.h"
 #import "fishhook.h"
 #import <objc/runtime.h>
@@ -30,11 +31,14 @@ void newHookedNSLog(NSString *format, ...) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    NSLog(@"Start");
     struct rebinding nslogBind;
     nslogBind.name = "NSLog";
     nslogBind.replacement = hookedNSLog;
     nslogBind.replaced = (void *)&originalNSLog;
+    
+    printf("%p %p \n", _dyld_get_image_header(0),_dyld_get_image_vmaddr_slide(0));
+    
     struct rebinding rebs[] = {nslogBind};
     rebind_symbols(rebs, 1);
     

@@ -113,7 +113,7 @@ struct section_64 {                 /* for 64-bit architectures */
 
 ## Fishhook原理概述
 
-为了Hook C 函数，我们首先要找到被Hook的函数的位置：系统的`dylib`(`动态库`)在内存里面的地址是不固定的，每次启动程序的时候地址都是随机的。 苹果为了能在 Mach-O 文件中访问外部函数，采用了一个技术，叫做`PIC`（`位置代码独立`）技术。当你的应用程序想要调用 Mach-O 文件外部的函数的时候，或者说如果 Mach-O 内部需要调用系统的库函数时，Mach-O 文件会：
+系统的`dylib`(`动态库`)在内存里面的地址是不固定的，每次启动程序的时候地址都是随机的。 苹果为了能在 Mach-O 文件中访问外部函数，采用了一个技术，叫做`PIC`（`位置代码独立`）技术。当你的应用程序想要调用 Mach-O 文件外部的函数的时候，或者说如果 Mach-O 内部需要调用系统的库函数时，Mach-O 文件会：
 1. 先在 Mach-O 文件的 `__DATA` 段中建立一个`指针`。
 2. 然后`DYLD` 会进行动态绑定，它根据Mach-O文件中的`Load Command`提供的依赖信息，将 Mach-O 中的 `__DATA` 段中的指针绑定对应的系统函数。
 
@@ -189,7 +189,11 @@ extern void _dyld_register_func_for_add_image(
 
 对于每一个已经存在的镜像，当它被动态链接时，都会执行回调 `void (*func)(const struct mach_header* mh, intptr_t vmaddr_slide)`，传入文件的 mach_header 以及一个虚拟内存地址 intptr_t。
 
-
+## 四个重要的表格
+1. `Lazy Symbol Pointer Table` -- `延迟符号指针表`
+2. `Indirect Symbol Table ` -- `间接符号表`
+3. `Symbol Table` -- `符号表`
+4. `String Table`  -- `字符表`
 这部分的代码主要功能是从镜像中查找 `linkedit_segment` , `symtab_command` 和 `dysymtab_command`。 在开始查找之前，要先跳过 `mach_header_t`长度的位置，也就是跳过这个镜像的头(header)，然后将当前指针强转成 `segment_command_t`(这个segment_command_t就是segment_command_64或者segment_command)，通过对比 cmd 的值，来找到需要的 segment_command_t。
 在查找了几个关键的 segment 之后，我们可以根据几个 segment 获取对应表的内存地址：
 
