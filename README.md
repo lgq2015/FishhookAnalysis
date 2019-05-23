@@ -132,17 +132,17 @@ struct section_64 {                 /* for 64-bit architectures */
 
 ```
 struct rebinding {
-const char *name;               // 需要Hook的函数名称
-void *replacement;              // 新函数的函数指针（地址）
-void **replaced;                // 原函数地址的指针（用来保存原函数）
+    const char *name;               // 需要Hook的函数名称
+    void *replacement;              // 新函数的函数指针（地址）
+    void **replaced;                // 原函数地址的指针（用来保存原函数）
 };
 ```
 
 ```
 struct rebindings_entry {
-struct rebinding *rebindings;   // Hook信息(因为可以同时Hook多个函数)
-size_t rebindings_nel;          // Hook数量
-struct rebindings_entry *next;  // 下一个Hook 入口
+    struct rebinding *rebindings;   // Hook信息(因为可以同时Hook多个函数)
+    size_t rebindings_nel;          // Hook数量
+    struct rebindings_entry *next;  // 下一个Hook 入口
 };
 static struct rebindings_entry *_rebindings_head;
 ```
@@ -153,6 +153,7 @@ int rebind_symbols(struct rebinding rebindings[], size_t rebindings_nel);
 ```
 其中：
 `rebindings`: 存放`rebingding`结构体的数组，fishhook可以同时交换多个函数。
+
 `rebindings_nel`:  存放 `rebingdings`数组的长度。
 
 
