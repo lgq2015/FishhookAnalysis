@@ -117,8 +117,10 @@ struct section_64 {                 /* for 64-bit architectures */
 1. 先在 Mach-O 文件的 _DATA 段中建立一个指针（空指针），这个指针变量指向外部函数。
 2. 然后DYLD 会动态的进行绑定，将 Mach-O 中的 _DATA 段中的指针，指向外部函数。
 
-`注： 对于非懒加载符号表，DYLD会立刻马上去链接动态库
-    对于懒加载符号表，DYLD会在第一次执行代码的时候去动态的链接动态库`
+```
+注： 对于非懒加载符号表，DYLD会立刻马上去链接动态库
+    对于懒加载符号表，DYLD会在第一次执行代码的时候去动态的链接动态库
+```
 所以说，C的底层也有动态的表现。C在内部函数的时候是静态的，在编译后，函数的内存地址就确定了。但是，外部的函数是不能确定的，也就是说C的底层也有动态的。fishhook 之所以能 hook C函数，是利用了 Mach-O 文件的 PIC 技术特点。也就造就了静态语言C也有动态的部分，通过 DYLD 进行动态绑定的时候做了手脚。
 我们经常说符号，其实 _DATA 段中建立的指针就是符号。fishhook的原理其实就是，将指向`系统方法`（即外部函数）的符号`重新进行绑定指向内部的函数`。这样就把系统方法与自己定义的方法进行了交换。这也就是为什么C的内部函数修改不了，自定义的函数修改不了，只能修改 Mach-O 外部的函数。
 
@@ -147,25 +149,25 @@ struct rebindings_entry {
 static struct rebindings_entry *_rebindings_head;
 ```
 其中值得**注意**的是 `rebinding_entry` 在`fishhook.c`文件中被定义为静态变量，只在它的源文件中可以访问。
-这样可以通过判断 _rebindings_head->next 的值来判断是否为第一次调用，然后使用 `_dyld_register_func_for_add_image` 将 `_rebind_symbols_for_image` 注册为回调
+
 ```
     int rebind_symbols(struct rebinding rebindings[], size_t rebindings_nel);
 ```
 
 其中：
 
-✸.  `rebindings`: 存放`rebingding`结构体的数组，fishhook可以同时交换多个函数。
+✸.  `rebindings`: 存放`rebingding`结构体的数组，`fishhook`可以同时交换多个函数。
 
 ✸. `rebindings_nel`:  存放 `rebingdings`数组的长度。
 
-如果要Hook的函数很少，我们可以采取这一种写法：
+另外如果要Hook的函数很少，我们可以采取这一种写法：
 ```
     rebind_symbols((struct rebinding[1]){{ "func", newFunc, (void**)&oldFunc }}, 1);
 ```
 
 
 
-
+我们可以通过判断 _rebindings_head->next 的值来判断是否为第一次调用，然后使用 `_dyld_register_func_for_add_image` 将 `_rebind_symbols_for_image` 注册为回调。
 在 dyld 加载镜像时，会执行注册过的回调函数；当然，我们也可以使用下面的方法注册自定义的回调函数，同时也会为所有已经加载的镜像执行回调：
 ```
 extern void _dyld_register_func_for_add_image(
