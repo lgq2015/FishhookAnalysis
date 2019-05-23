@@ -33,6 +33,63 @@ const struct mach_header*   _dyld_get_image_header(uint32_t image_index)
 函数的入参为映像在进程当中的索引号，函数返回的值是一个映像的mach-o头部信息struct mach_header结构体指针，如果是64位系统则返回的是struct mach_header_64结构体指针。你可以通过这个函数返回的映像的头部结构体来遍历和访问映像中的所有信息和数据。
 
 **`一个映像的头部信息结构体指针其实就是映像在内存中加载的基地址。`**
-**`一般情况下索引为0的映像是dyld库的映像，而索引为1的映像就是当前进程的可执行程序映像。`**
+
+**`一般情况下索引为0的映像是DYLD库的映像，而索引为1的映像就是当前进程的可执行程序映像。但是在lldbx执行image list操作时，输出的索引为0的是当前可执行程序映像，而索引为1的映像是DYLD库的映像，是反过来的。`**
+
+3. 获取进程中某个映像加载的Slide值
+```
+intptr_t   _dyld_get_image_vmaddr_slide(uint32_t image_index) 
+```
+
+函数的入参为映像在进程当中的索引号，函数的返回值是映像加载的Slide值。关于Slide值的介绍已经在上面有详细说明。在mach-o格式程序中的结构体描述信息中凡是涉及到指针字段都应该加上这个值才是真实的内存地址。
+
+4. 获取进程中某个映像的名称
+```
+const char*  _dyld_get_image_name(uint32_t image_index)
+```
+函数的入参为映像在进程当中的索引号，函数的返回值是映像对应库的全路径名称，返回的字符串我们不能修改也不必去销毁它。
+
+5. 注册映像加载和卸载的回调通知函数
+```
+void _dyld_register_func_for_add_image(void (*func)(const struct mach_header* mh, intptr_t vmaddr_slide))
+void _dyld_register_func_for_remove_image(void (*func)(const struct mach_header* mh, intptr_t vmaddr_slide))
+```
+如果你通过函数_dyld_register_func_for_add_image注册了一个映像被加载时的回调函数时，那么每当后续一个新的映像被加载但未初始化前就会调用注册的回调函数，回调函数的两个入参分别表示加载的映像的头结构和对应的Slide值。如果在调用_dyld_register_func_for_add_image时系统已经加载了某些映像，则会分别对这些加载完毕的每个映像调用注册的回调函数。
+如果你通过函数_dyld_register_func_for_remove_image注册了一个映像被卸载时的回调函数时，那么每当一个映像被卸载前都会调用注册的回调函数，回调函数的两个入参分别表示卸载的映像的头结构和对应的Slide值。
+这两个函数的作用通常用来做程序加载映像的监控以及一些统计处理。
+
+6. 获取某个库链接时和运行时的版本号
+```
+//获取库运行时的版本号
+int32_t NSVersionOfRunTimeLibrary(const char* libraryName)
+//获取库链接时的版本号
+int32_t NSVersionOfLinkTimeLibrary(const char* libraryName)
+```
+我们在XCODE工程中链接一些系统动态库时，有时候会选择某个具体版本的动态库，但是有些操作系统可能不一定会提供对应版本的动态库，这样就会导致程序运行时加载的动态库版本和链接时指定的动态库的版本不一致。还有一种场景就是工程中并没有链接对应的动态库，但是因为其他库会链接对应的动态库，就会出现虽然没有直接链接对应的动态库但是还是会加载对应的动态库的情况。
+因此系统提供了这两个API可以获取某个动态库链接和加载运行时的版本号。这两个函数的入参都是动态库的名称，这个名称是不带路径和扩展名以及不带lib前缀的库名称。函数返回库对应的版本号，如果库不存在或者没有被加载或者没有被链接则返回-1。比如下面的代码：
+//这里的名称c++其实是指的libc++.dylib这个库。
+uint32_t v1 =  NSVersionOfRunTimeLibrary("c++");
+uint32_t v2 =  NSVersionOfLinkTimeLibrary("c++");
+
+如果我们的程序并没有显示的链接libc++.dylib则后者函数会返回-1。而前者则一般都会返回一个对应的libc++的版本号。
+这两个函数的主要用来做一些库分析和运行监测等功能，比如可以检测某个库是否是一个在运行时被加载而不是显示链接进来的动态库。
+
+7. 获取当前进程可执行程序的路径文件名
+int _NSGetExecutablePath(char* buf, uint32_t* bufsize)
+
+函数的入参buf和bufsize指明保存可执行文件路径名的缓存和缓存的尺寸，其中的bufsize是要指明缓存的尺寸，并且会输出可执行文件路径名称的真实尺寸。如果函数调用返回正确则返回0，否则返回-1。就比如下面的例子：
+char buf[256];
+uint32_t bufsize = sizeof(buf)/sizeof(char);
+_NSGetExecutablePath(buf, &bufsize);
+
+
+8. 注册当前线程结束时的回调函数
+```
+void _tlv_atexit(void (*termFunc)(void* objAddr), void* objAddr)
+```
+
+有时候我们想监控线程的结束事件，那么就可以用这个函数来实现。这个函数用来监控当前线程的结束，当线程结束或者终止时就会调用注册的回调函数，_tlv_atexit函数有两个参数：第一个是一个回调函数指针，第二个是一个扩展参数，作为回调函数的入参来使用。
+
+
 
 
