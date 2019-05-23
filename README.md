@@ -128,10 +128,11 @@ struct section_64 {                 /* for 64-bit architectures */
 **`NSLog 懒加载符号表在内存中的地址 = Mach-O 在内存中的偏移地址 + NSLog懒加载符号表在Mach-O的偏移地址`**
 
 获取Mach-O文件在内存中的偏移地址：
+
 `ASLR` 是 *Address Space Layout Randomization* 的缩写，中文翻译为`地址空间布局随机化`，这个概念并非苹果原创。在早期的版本中 `Mach-O`文件 被`DYLD`加载到内存中的地址对于一个程序来说是静态不变的，这种原始的加载方案给黑客攻击带来了便利，所以iOS 4.3 以后引入了 `ASLR`，即给每个镜像在在被`DYLD`加载进入内存时加一个随机的偏移量 `slide`。
 
-    1. 获取这个slide的方式是调用`dlfcn`库的: `_dyld_get_image_vmaddr_slide(i)`。
-    2. 获取镜像的起始位置也要调用`dlfcn`库的:   `_dyld_get_image_header(i)`。
+1. 获取这个slide的方式是调用`dlfcn`库的: `_dyld_get_image_vmaddr_slide(i)`。
+2. 获取镜像的起始位置也要调用`dlfcn`库的:   `_dyld_get_image_header(i)`。
 
 
 ## 两个重要的结构体和接口
