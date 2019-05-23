@@ -131,14 +131,14 @@ C的内部函数的是静态的，在编译后，函数的内存地址就确定�
 接下来我们以 NSLog 为例，看 fishhook 是如何通过修改懒加载和非懒加载两个表的指针达到C函数Hook的目的。NSLog是系统函数所以是在懒加载表中的。那么，我们如何找到 NSLog 的符号表呢？公式如下：
 **`NSLog 懒加载符号表在内存中的地址 = Mach-O 在内存中的偏移地址 + NSLog懒加载符号表在Mach-O的偏移地址`**
 
-**`获取Mach-O文件在内存中的偏移地址：`**
+### 获取Mach-O文件在内存中的偏移地址
 
 `ASLR` 是 *Address Space Layout Randomization* 的缩写，中文翻译为`地址空间布局随机化`，这个概念并非苹果原创。在早期的版本中 `Mach-O`文件 被`DYLD`加载到内存中的地址对于一个程序来说是静态不变的，这种原始的加载方案给黑客攻击带来了便利，所以iOS 4.3 以后引入了 `ASLR`，即给每个镜像在在被`DYLD`加载进入内存时加一个随机的偏移量 `slide`。
 
 1. 获取这个slide的方式是调用`dlfcn`库的: `_dyld_get_image_vmaddr_slide(i)`。
 2. 获取镜像的起始位置也要调用`dlfcn`库的:   `_dyld_get_image_header(i)`。
 
-**`获取NSLog懒加载符号表在Mach-O的偏移地址：`**
+### `获取NSLog懒加载符号表在Mach-O的偏移地址
 
 
 
