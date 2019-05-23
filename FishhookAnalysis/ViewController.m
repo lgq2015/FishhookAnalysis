@@ -10,10 +10,18 @@
 #import "fishhook.h"
 #import <objc/runtime.h>
 static void (*originalNSLog)(NSString *format, ...);
+static void (*originalNSLog2)(NSString *format, ...);
+
 void hookedNSLog(NSString *format, ...) {
     NSString* hookedString = [format stringByAppendingString:@"  Hooked!! 🐶🐶"];
     originalNSLog(hookedString);
 }
+
+void newHookedNSLog(NSString *format, ...) {
+    NSString* hookedString = [format stringByAppendingString:@"  Hooked!! 🐶🐶🐶🐶"];
+    originalNSLog2(hookedString);
+}
+
 
 @interface ViewController ()
 @end
@@ -23,42 +31,25 @@ void hookedNSLog(NSString *format, ...) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSLog(@"%@", [self class]);
-    NSLog(@"%@", [object_getClass(self) class]);
+    struct rebinding nslogBind;
+    nslogBind.name = "NSLog";
+    nslogBind.replacement = hookedNSLog;
+    nslogBind.replaced = (void *)&originalNSLog;
+    struct rebinding rebs[] = {nslogBind};
+    rebind_symbols(rebs, 1);
     
-    dispatch_queue_t serialQueue = dispatch_queue_create("serialQueue", DISPATCH_QUEUE_SERIAL);
-    dispatch_set_target_queue(serialQueue, dispatch_get_main_queue());
-    
-    UIView* aView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-    aView.backgroundColor = [UIColor greenColor];
-    [self.view addSubview:aView];
-    
-    dispatch_async(serialQueue, ^{
-        dispatch_suspend(serialQueue);
-        NSLog(@"first");
-        [UIView animateWithDuration:2.0 animations:^{
-            aView.center = CGPointMake(aView.center.x, aView.center.y + 100);
-        } completion:^(BOOL finished) {
-            NSLog(@"first end");
-            dispatch_resume(serialQueue);
-        }];
-    });
-    
-    dispatch_async(serialQueue, ^{
-        NSLog(@"PRINT RANDOM THING");
-    });
-    
-    dispatch_async(serialQueue, ^{
-        NSLog(@"second");
-        [UIView animateWithDuration:2.0 animations:^{
-            aView.center = CGPointMake(aView.center.x + 100, aView.center.y);
-        } completion:^(BOOL finished) {
-            NSLog(@"asas");
-        }];
-    });
-    
-    
-   
+//    struct rebinding nslogBind2;
+//    nslogBind2.name = "NSLog";
+//    nslogBind2.replacement = newHookedNSLog;
+//    nslogBind2.replaced = (void *)&originalNSLog2;
+//    struct rebinding rebs2[] = {nslogBind2};
+//    rebind_symbols(rebs2, 1);
 }
+
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSLog(@"点击屏幕");
+}
+
 
 @end

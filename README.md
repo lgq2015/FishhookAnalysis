@@ -144,8 +144,19 @@ struct rebindings_entry {
     size_t rebindings_nel;          // Hook数量
     struct rebindings_entry *next;  // 下一个Hook 入口
 };
+static struct rebindings_entry *_rebindings_head;
 ```
-其中值得注意的是 `rebinding_entry` 在fishhook中被定义为静态变量，只在他的源文件中可以访问。
+其中值得注意的是 `rebinding_entry` 在`fishhook.c`文件中被定义为静态变量，只在它的源文件中可以访问。
+这样可以通过判断 _rebindings_head->next 的值来判断是否为第一次调用，然后使用 `_dyld_register_func_for_add_image` 将 `_rebind_symbols_for_image` 注册为回调
+
+这部分的代码主要功能是从镜像中查找 `linkedit_segment` , `symtab_command` 和 `dysymtab_command`。 在开始查找之前，要先跳过 `mach_header_t`长度的位置，也就是跳过这个镜像的头(header)，然后将当前指针强转成 `segment_command_t`(这个segment_command_t就是segment_command_64或者segment_command)，通过对比 cmd 的值，来找到需要的 segment_command_t。
+在查找了几个关键的 segment 之后，我们可以根据几个 segment 获取对应表的内存地址：
+
+在 `linkedit_segment` 结构体中获得其虚拟地址以及文件偏移量，然后通过一下公式来计算当前 __LINKEDIT 段的位置：
+
+`slide + vmaffr - fileoff`
+
+该函数的实现的核心内容就是将符号表中的 `symbol_name` 与 `rebinding`结构题中的名字进行比较，如果出现了匹配，就会将原函数的实现传入 origian_open 函数指针的地址，并使用新的函数实现 new_open 代替原实现。
 
 
 
