@@ -176,6 +176,7 @@ static void rebind_symbols_for_image(struct rebindings_entry *rebindings,
 
 static void _rebind_symbols_for_image(const struct mach_header *header,
                                       intptr_t slide) {
+    printf("%p %p\n", header, slide);
     rebind_symbols_for_image(_rebindings_head, header, slide);
 }
 

@@ -194,6 +194,7 @@ extern void _dyld_register_func_for_add_image(
 2. `Indirect Symbol Table ` -- `间接符号表`
 3. `Symbol Table` -- `符号表`
 4. `String Table`  -- `字符表`
+
 这部分的代码主要功能是从镜像中查找 `linkedit_segment` , `symtab_command` 和 `dysymtab_command`。 在开始查找之前，要先跳过 `mach_header_t`长度的位置，也就是跳过这个镜像的头(header)，然后将当前指针强转成 `segment_command_t`(这个segment_command_t就是segment_command_64或者segment_command)，通过对比 cmd 的值，来找到需要的 segment_command_t。
 在查找了几个关键的 segment 之后，我们可以根据几个 segment 获取对应表的内存地址：
 
