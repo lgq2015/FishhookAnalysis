@@ -38,8 +38,8 @@ void newHookedNSLog(NSString *format, ...) {
     nslogBind.replaced = (void *)&originalNSLog;
     
     printf("%d %p %p \n",_dyld_image_count(),
-                        _dyld_get_image_header(0),
-                        _dyld_get_image_vmaddr_slide(0));
+                        _dyld_get_image_header(1),
+                        _dyld_get_image_vmaddr_slide(1));
     
     struct rebinding rebs[] = {nslogBind};
     rebind_symbols(rebs, 1);
