@@ -159,7 +159,7 @@ static struct rebindings_entry *_rebindings_head;
 
 如果要Hook的函数很少，我们可以采取这一种写法：
 ```
-    rebind_symbols({{ "func", newFunc, (void**)&oldFunc }}, 1);
+    rebind_symbols((struct rebinding[1]){{ "func", newFunc, (void**)&oldFunc }}, 1);
 ```
 
 
