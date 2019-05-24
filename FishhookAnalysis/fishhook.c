@@ -145,6 +145,8 @@ static void rebind_symbols_for_image(struct rebindings_entry *rebindings,
     }
     
     // Find base symbol/string table addresses
+    
+    printf("vmaddr -> %p %p %p %p\n", linkedit_segment->vmaddr, slide, linkedit_segment->fileoff , linkedit_segment->vmaddr + slide - linkedit_segment->fileoff);
     uintptr_t linkedit_base = (uintptr_t)slide + linkedit_segment->vmaddr - linkedit_segment->fileoff;
     nlist_t *symtab = (nlist_t *)(linkedit_base + symtab_cmd->symoff);
     char *strtab = (char *)(linkedit_base + symtab_cmd->stroff);

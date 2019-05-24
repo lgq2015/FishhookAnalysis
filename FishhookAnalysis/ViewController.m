@@ -40,7 +40,8 @@ void newHookedNSLog(NSString *format, ...) {
     printf("%d %p %p \n",_dyld_image_count(),
                         _dyld_get_image_header(1),
                         _dyld_get_image_vmaddr_slide(1));
-    
+    int a = 10;
+    printf("%p \n", &a);
     struct rebinding rebs[] = {nslogBind};
     rebind_symbols(rebs, 1);
     
