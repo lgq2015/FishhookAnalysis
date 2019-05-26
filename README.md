@@ -1,5 +1,5 @@
 # fishhook 分析 
-
+## Mach-O格式
 Mach-O不像XML / YAML / JSON 这样的特殊格式，它只是一个以有意义的数据块分组的二进制字节流。这些块包含元信息，例如：字节顺序，cpu类型，块的大小等。
     
 典型的Mach-O文件由三个段组成：
@@ -7,11 +7,13 @@ Mach-O不像XML / YAML / JSON 这样的特殊格式，它只是一个以有意�
 2. `加载命令`: 它是一种目录，描述了段的位置，符号表，动态符号表等。每个加载命令都包含一个元信息，如命令类型，名称，二进制位置等等。
 3. `数据`: 通常是目标文件的最大部分。 它包含代码和数据，例如符号表，动态符号表等。
 OS X上有两种类型的目标文件：Mach-O文件和通用二进制文件，也就是所谓的Fat文件。 它们之间的区别：Mach-O文件包含一个体系结构（i386，x86_64，arm64等）的目标代码，而Fat二进制文件可能包含多个目标文件，因此包含不同体系结构的对象代码（i386和x86_64，arm和arm64， 等等。）
-<p align="center"><img src="FishhookAnalysis/images/macho_header.png" alt="drawing" width="200" /></p>
+<p align="center">
+    <img src="FishhookAnalysis/images/macho_header.png" alt="drawing" width="200" />
+</p>
 我们可以从这一张图来简单的理解一下。
-<p align="center"><img src="FishhookAnalysis/images/macho_memory_layout.png" alt="drawing" width="500"/></p>
-
-
+<p align="center">
+    <img src="FishhookAnalysis/images/macho_memory_layout.png" alt="drawing" width="500"/>
+</p>
 
 ```
 struct mach_header {
@@ -36,7 +38,9 @@ struct mach_header_64 {
 };
 
 ```
-<p align="center"><img src="FishhookAnalysis/images/header.png" alt="drawing" /></p>
+<p align="center">
+    <img src="FishhookAnalysis/images/header.png" alt="drawing" />
+</p>
 
 ```
 struct load_command {

@@ -24,6 +24,7 @@
 		31ED3F40228F276A000DF212 /* fishhook.png in Resources */ = {isa = PBXBuildFile; fileRef = 31ED3F3F228F276A000DF212 /* fishhook.png */; };
 		31ED3F42228F27FC000DF212 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 31ED3F41228F27FC000DF212 /* README.md */; };
 		31ED3F44229133D5000DF212 /* macho_header.png in Resources */ = {isa = PBXBuildFile; fileRef = 31ED3F43229133D5000DF212 /* macho_header.png */; };
+		31EE6127229798D200D94F61 /* macho.png in Resources */ = {isa = PBXBuildFile; fileRef = 31EE6126229798D100D94F61 /* macho.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 		31ED3F3F228F276A000DF212 /* fishhook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fishhook.png; sourceTree = "<group>"; };
 		31ED3F41228F27FC000DF212 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		31ED3F43229133D5000DF212 /* macho_header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = macho_header.png; sourceTree = "<group>"; };
+		31EE6126229798D100D94F61 /* macho.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = macho.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				31ED3F43229133D5000DF212 /* macho_header.png */,
+				31EE6126229798D100D94F61 /* macho.png */,
 				31B069FE22933CBD004B9DB5 /* macho_memory_layout.png */,
 				31B06A042293DB8D004B9DB5 /* header.png */,
 				31B06A002293DADA004B9DB5 /* load_command.png */,
@@ -173,6 +176,7 @@
 			files = (
 				31ED3F40228F276A000DF212 /* fishhook.png in Resources */,
 				31B06A072293DB9E004B9DB5 /* section.png in Resources */,
+				31EE6127229798D200D94F61 /* macho.png in Resources */,
 				31B06A012293DADA004B9DB5 /* load_command.png in Resources */,
 				31A6CE8922789B46007BBEDA /* LaunchScreen.storyboard in Resources */,
 				31ED3F42228F27FC000DF212 /* README.md in Resources */,
