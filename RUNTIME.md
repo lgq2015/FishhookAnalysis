@@ -191,7 +191,7 @@ struct objc_method {
 ```
 &emsp;我们可以看到该结构体中包含了一个`SEL`和`IMP`，实际上相当于在`SEL`和`IMP`之间做了一个映射。有了`SEL`，我们便可以找到对应得`IMP`，从而调用方法的实现代码。
 ```
-1. id <span style="color:red">method_invoke</span>( id receiver, Method m, ... );                                          // 调用指定方法的实现
+1. id method_invoke( id receiver, Method m, ... );                                          // 调用指定方法的实现
 2. SEL method_getName( Method m );                                                          // 获取方法名
 3. IMP method_getImplementation( Method m );                                                // 返回方法实现
 4. const char* method_getTypeEncoding( Method m );                                          // 获取描述方法参数和返回值类型的字符串
