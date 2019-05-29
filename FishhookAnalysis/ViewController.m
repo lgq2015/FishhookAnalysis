@@ -18,6 +18,7 @@ void hookedNSLog(NSString *format, ...) {
     originalNSLog(hookedString);
 }
 
+
 void newHookedNSLog(NSString *format, ...) {
     NSString* hookedString = [format stringByAppendingString:@"  Hooked!! 🐶🐶🐶🐶"];
     originalNSLog2(hookedString);
@@ -31,8 +32,19 @@ void newHookedNSLog(NSString *format, ...) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    SEL sel1 = @selector(method1);
-    NSLog(@"sel : %p", sel1);
+    
+    Class currentClass = [self class];
+    const char *a = object_getClassName(currentClass);
+    for (int i = 1; i < 5; i++) {
+        NSLog(@"Following the isa pointer %d times gives %p---%s", i, currentClass,a);
+        currentClass = object_getClass(currentClass);
+        a = object_getClassName(currentClass);
+    }
+    
+    SEL aSelector = NSSelectorFromString(@"Cool");
+    printf("%s", (const char*)aSelector);
+    
+  
 //    struct rebinding nslogBind;
 //    nslogBind.name = "NSLog";
 //    nslogBind.replacement = hookedNSLog;
@@ -44,7 +56,6 @@ void newHookedNSLog(NSString *format, ...) {
 //    printf("%p \n", &a);
 //    struct rebinding rebs[] = {nslogBind};
 //    rebind_symbols(rebs, 1);
-    NSLog(@" class address %p ", [self class]);
 
 }
 

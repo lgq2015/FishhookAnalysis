@@ -207,3 +207,32 @@ struct objc_method {
 
 
 ### 一个小规律，`get`出来的值不用`free()`， `copy`出来的值一定要`free()`
+
+```
+1. const char * sel_getName(SEL sel);                                                       // 获得选择器指定的方法的名字
+2. BOOL sel_isEqual(SEL lhs, SEL rhs);                                                      // 比较两个选择器是否相同
+3. SEL sel_registerName(const char *str);                                                   // 使用Objective-C Runtime系统注册方法，找到方法名对应的选择器，并返回该选择器值。
+```
+
+
+
+### `Super`
+&emsp; 在`Objective-C`中，如果我们需要在类的方法中调用父类的方法，通常都会用到`super`
+```
+-(void)viewDidLoad {
+    [super viewDidLoad];
+    // Do something 
+}
+```
+&emsp;首先我们要知道的是`super`与`self`不同，`self`是类的一个隐藏参数，每个方法的实现的第一个参数都是`self`。然而`super`并不是隐藏参数，它实际上只是一个`"编译器标示符"`，它负责告诉编译器，当调用`viewDidLoad`方法时，去调用父类的方法，而不是本类中的方法。而它实际上与`self`指向的是相同的消息接受者。
+```
+struct objc_super {
+    id receiver;
+    Class superClass;
+}
+```
+&emsp; 当我们用`super`来接收消息时，编译器会生成一个`objc_super`结构题。就上面的例子而言，这个结构体的`receiver`就是`MyViewController`对象，与`self`相同；`superClass`指向`MyViewController`的父类`UIViewController`。接下来，发送消息的时候，不是调用`objc_msgSend函数`，而是调用`objc_msgSendSuper函数`
+```
+id objc_msgSendSuper(struct objc_super *super, SEL op, ... );
+```
+&emsp;该函数的实际操作是： 从`objc_super`结构题体向的`superClass`的方法列表开始查找`viewDidLoad`的`selector`，找到之后`objc_super->receiver`去调用这个`selector`。
