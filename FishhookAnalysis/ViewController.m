@@ -44,13 +44,18 @@ void newHookedNSLog(NSString *format, ...) {
 //    printf("%p \n", &a);
 //    struct rebinding rebs[] = {nslogBind};
 //    rebind_symbols(rebs, 1);
-    
+    NSLog(@" class address %p ", [self class]);
 
 }
 
++ (void) classMethod {
+    NSLog(@" class %p ", self);
+}
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     NSLog(@"点击屏幕");
+    [ViewController classMethod];
+    NSLog(@"%p %p", self, [self class]);
 }
 
 

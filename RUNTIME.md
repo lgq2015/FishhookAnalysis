@@ -148,8 +148,8 @@ Class object_getClass( id obj );
 Class object_setClass( id obj, Class cls );
 ```
 
-
-`SEL`: `SEL`又叫做选择器，是表示一个方法的`selector`的指针，其定义如下：
+### `SEL`
+&emsp;`SEL`又叫做选择器，是表示一个方法的`selector`的指针，其定义如下：
 ```
     typedef struct objc_selector *SEL;
 ```
@@ -172,4 +172,49 @@ Class object_setClass( id obj, Class cls );
 1. sel_registerName函数
 2. Objective-C编译器提供的@selector()
 3. NSSelectorFromString()方法
+```
+### `IMP`
+&emsp;`IMP`实际上就是一个函数指针，指向方法实现的首地址。其定义如下：
+```
+id (*IMP)(id, SEL, ...)
+```
+&emsp;第一个参数就是`指向self的指针(如果是实例方法，则是实例的内存地址，如果是类方法，则是类的内存地址)`，第二个参数是方法选择器，接下来的是方法的实际参数列表。通过取得`IMP`，我们可以跳过`Runtime`的消息传递机制，直接执行`IMP`指向的函数实现，这样省去了`Runtime`消息传递过程中的一系列查找炒作，会比直接向对象发送消息高效一些。
+
+### `Method`
+```
+typedef struct objc_method *Method;
+struct objc_method {
+    SEL method_name;                        // 方法名
+    char *method_types;
+    IMP method_imp;                         // 方法实现
+}
+```
+&emsp;我们可以看到该结构体中包含了一个`SEL`和`IMP`，实际上相当于在`SEL`和`IMP`之间做了一个映射。有了`SEL`，我们便可以找到对应得`IMP`，从而调用方法的实现代码。
+```
+// 调用指定方法的实现
+id method_invoke( id receiver, Method m, ... );
+// 获取方法名
+SEL method_getName( Method m );
+// 返回方法实现
+IMP method_getImplementation( Method m );
+// 获取描述方法参数和返回值类型的字符串
+const char* method_getTypeEncoding( Method m );
+// 获取方法的返回值类型的字符串
+char *method_copyReturnType( Method m );
+// 获取方法的制定位置参数的类型字符串
+char *method_copyArgumentType( Method m, unsigned int index );
+// 通过引用 返回方法的返回值类型的字符串
+void method_getReturnType( Method m, char *dst, size_t dst_len);
+// 返回方法的参数个数
+unsigned int method_getNumberOfArguments( Method m );
+// 通过引用 返回方法的制指定位置参数的类型字符串
+void method_getArgumentType( Method m, unsigned int index, char *dst, size_t dst_len);
+// 返回指定方法的方法描述结构题
+struct objc_method_description *method_getDescription( Method m );
+// 设置方法的实现
+IMP method_setImplementation( Method m, IMP imp );
+// 交换两个方法的实现
+void method_exchangeImplementations( Method m1, Method m2 );
+
+// 
 ```
