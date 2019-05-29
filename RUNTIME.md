@@ -191,32 +191,18 @@ struct objc_method {
 ```
 &emsp;我们可以看到该结构体中包含了一个`SEL`和`IMP`，实际上相当于在`SEL`和`IMP`之间做了一个映射。有了`SEL`，我们便可以找到对应得`IMP`，从而调用方法的实现代码。
 ```
-// 调用指定方法的实现
-id method_invoke( id receiver, Method m, ... );
-// 获取方法名
-SEL method_getName( Method m );
-// 返回方法实现
-IMP method_getImplementation( Method m );
-// 获取描述方法参数和返回值类型的字符串
-const char* method_getTypeEncoding( Method m );
-// 获取方法的返回值类型的字符串
-char *method_copyReturnType( Method m );
-// 获取方法的制定位置参数的类型字符串
-char *method_copyArgumentType( Method m, unsigned int index );
-// 通过引用 返回方法的返回值类型的字符串
-void method_getReturnType( Method m, char *dst, size_t dst_len);
-// 返回方法的参数个数
-unsigned int method_getNumberOfArguments( Method m );
-// 通过引用 返回方法的制指定位置参数的类型字符串
-void method_getArgumentType( Method m, unsigned int index, char *dst, size_t dst_len);
-// 返回指定方法的方法描述结构题
-struct objc_method_description *method_getDescription( Method m );
-// 设置方法的实现
-IMP method_setImplementation( Method m, IMP imp );
-// 交换两个方法的实现
-void method_exchangeImplementations( Method m1, Method m2 );
-
-// 
+1. id method_invoke( id receiver, Method m, ... );                                          // 调用指定方法的实现
+2. SEL method_getName( Method m );                                                          // 获取方法名
+3. IMP method_getImplementation( Method m );                                                // 返回方法实现
+4. const char* method_getTypeEncoding( Method m );                                          // 获取描述方法参数和返回值类型的字符串
+5. char *method_copyReturnType( Method m );                                                 // 获取方法的返回值类型的字符串
+6. char *method_copyArgumentType( Method m, unsigned int index );                           // 获取方法的制定位置参数的类型字符串
+7. void method_getReturnType( Method m, char *dst, size_t dst_len);// 通过引用 返回方法的返回值类型的字符串
+8. unsigned int method_getNumberOfArguments( Method m );// 返回方法的参数个数
+9. void method_getArgumentType( Method m, unsigned int index, char *dst, size_t dst_len); // 通过引用 返回方法的制指定位置参数的类型字符串
+10. struct objc_method_description *method_getDescription( Method m );// 返回指定方法的方法描述结构题
+11. IMP method_setImplementation( Method m, IMP imp );// 设置方法的实现
+12. void method_exchangeImplementations( Method m1, Method m2 ); // 交换两个方法的实现
 ```
 
 
