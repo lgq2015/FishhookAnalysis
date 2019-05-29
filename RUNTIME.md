@@ -72,15 +72,6 @@
 
 一旦此方法被 Swizzling，那么方法的 cmd 势必会发生变化，出现了 bug 之后想必你一定找不到，等你找到之后心里一定会问候那位 Swizzling 你的方法的开发者祖宗十八代安好的，再者如果你 Swizzling 的是系统的方法恰好系统的方法内部用到了 cmd ...~_~（此处后背惊起一阵冷汗）。
 
-```
-typedef struct objc_ivar *Ivar;
-struct objc_ivar {
-    char *ivar_name;        // 变量名
-    char *ivar_type;        // 变量类型
-    int ivar_offset;        // 基地址偏移字节
-    int space;
-}
-```
 
 
 
@@ -136,6 +127,18 @@ struct objc_object {
 typedef struct objc_object *id;
 ```
 
+
+```
+typedef struct objc_ivar *Ivar;
+struct objc_ivar {
+    char *ivar_name;                        // 变量名
+    char *ivar_type;                        // 变量类型
+    int ivar_offset;                        // 基地址偏移字节
+    int space;
+}
+```
+
+
 ```
 // 返回给定对象的类名
 const char *object_getClassName( id obj );
@@ -146,3 +149,27 @@ Class object_setClass( id obj, Class cls );
 ```
 
 
+`SEL`: `SEL`又叫做选择器，是表示一个方法的`selector`的指针，其定义如下：
+```
+    typedef struct objc_selector *SEL;
+```
+&emsp;`objc_selector`结构体的详细定义并没有暴露出来，但是我们知道方法的`selector`用于表示运行时方法的名字。`Objective-C`在编译的时候，会根据每一个方法的名字，参数序列，生成一个唯一的标识。
+两个类之间，不管它们是父类与子类的关系，还是没有这种关系，只要方法名相同，这两个方法`SEL`就是一样的。所以`Objective-C同一个类不能存在两个同名的方法，即使参数类型不同也不行`。当然啦，不同的类可以拥有相同的`selector`，不同类的实例对象执行相同的`selector`时，会在各自的方法列表中根据`selector`去寻找对应的`IMP`。
+
+```
+// C++ 风格
+-(void)setWidth:(int)width;
+-(void)setWidth:(double)width;
+
+// Objective-C 风格
+-(void)setWidthWidthIntValue:(int)width;
+-(void)setWidthWidthDoubleValue: (double)width;
+```
+
+
+```
+// 获取selector的方法
+1. sel_registerName函数
+2. Objective-C编译器提供的@selector()
+3. NSSelectorFromString()方法
+```

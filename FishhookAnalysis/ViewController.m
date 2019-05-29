@@ -31,26 +31,21 @@ void newHookedNSLog(NSString *format, ...) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"Start");
-    struct rebinding nslogBind;
-    nslogBind.name = "NSLog";
-    nslogBind.replacement = hookedNSLog;
-    nslogBind.replaced = (void *)&originalNSLog;
+    SEL sel1 = @selector(method1);
+    NSLog(@"sel : %p", sel1);
+//    struct rebinding nslogBind;
+//    nslogBind.name = "NSLog";
+//    nslogBind.replacement = hookedNSLog;
+//    nslogBind.replaced = (void *)&originalNSLog;
+//
+//    printf("%d %p %p \n",_dyld_image_count(),
+//                        _dyld_get_image_header(1),
+//                        _dyld_get_image_vmaddr_slide(1));
+//    printf("%p \n", &a);
+//    struct rebinding rebs[] = {nslogBind};
+//    rebind_symbols(rebs, 1);
     
-    printf("%d %p %p \n",_dyld_image_count(),
-                        _dyld_get_image_header(1),
-                        _dyld_get_image_vmaddr_slide(1));
-    int a = 10;
-    printf("%p \n", &a);
-    struct rebinding rebs[] = {nslogBind};
-    rebind_symbols(rebs, 1);
-    
-//    struct rebinding nslogBind2;
-//    nslogBind2.name = "NSLog";
-//    nslogBind2.replacement = newHookedNSLog;
-//    nslogBind2.replaced = (void *)&originalNSLog2;
-//    struct rebinding rebs2[] = {nslogBind2};
-//    rebind_symbols(rebs2, 1);
+
 }
 
 
