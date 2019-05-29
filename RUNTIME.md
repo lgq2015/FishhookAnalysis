@@ -197,12 +197,12 @@ struct objc_method {
 4. const char* method_getTypeEncoding( Method m );                                          // 获取描述方法参数和返回值类型的字符串
 5. char *method_copyReturnType( Method m );                                                 // 获取方法的返回值类型的字符串
 6. char *method_copyArgumentType( Method m, unsigned int index );                           // 获取方法的制定位置参数的类型字符串
-7. void method_getReturnType( Method m, char *dst, size_t dst_len);// 通过引用 返回方法的返回值类型的字符串
-8. unsigned int method_getNumberOfArguments( Method m );// 返回方法的参数个数
-9. void method_getArgumentType( Method m, unsigned int index, char *dst, size_t dst_len); // 通过引用 返回方法的制指定位置参数的类型字符串
-10. struct objc_method_description *method_getDescription( Method m );// 返回指定方法的方法描述结构题
-11. IMP method_setImplementation( Method m, IMP imp );// 设置方法的实现
-12. void method_exchangeImplementations( Method m1, Method m2 ); // 交换两个方法的实现
+7. void method_getReturnType( Method m, char *dst, size_t dst_len);                         // 通过引用 返回方法的返回值类型的字符串
+8. unsigned int method_getNumberOfArguments( Method m );                                    // 返回方法的参数个数
+9. void method_getArgumentType( Method m, unsigned int index, char *dst, size_t dst_len);   // 通过引用 返回方法的制指定位置参数的类型字符串
+10. struct objc_method_description *method_getDescription( Method m );                      // 返回指定方法的方法描述结构体
+11. IMP method_setImplementation( Method m, IMP imp );                                      // 设置方法的实现
+12. void method_exchangeImplementations( Method m1, Method m2 );                            // 交换两个方法的实现
 ```
 
 
