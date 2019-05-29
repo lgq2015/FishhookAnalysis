@@ -218,3 +218,6 @@ void method_exchangeImplementations( Method m1, Method m2 );
 
 // 
 ```
+
+
+### 一个小规律，`get`出来的值不用`free()`， `copy`出来的值一定要`free()`
