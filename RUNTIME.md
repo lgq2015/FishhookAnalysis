@@ -71,3 +71,78 @@
 我们都知道 Objective-C Method 都会有两个隐含的参数 self, cmd，有的时候开发者在使用关联属性的适合可能懒得声明 (void *) 的 key，直接使用 cmd 变量 objc_setAssociatedObject(self, _cmd, xx, 0); 这会导致对当前IMP对 cmd 的依赖。
 
 一旦此方法被 Swizzling，那么方法的 cmd 势必会发生变化，出现了 bug 之后想必你一定找不到，等你找到之后心里一定会问候那位 Swizzling 你的方法的开发者祖宗十八代安好的，再者如果你 Swizzling 的是系统的方法恰好系统的方法内部用到了 cmd ...~_~（此处后背惊起一阵冷汗）。
+
+```
+typedef struct objc_ivar *Ivar;
+struct objc_ivar {
+    char *ivar_name;        // 变量名
+    char *ivar_type;        // 变量类型
+    int ivar_offset;        // 基地址偏移字节
+    int space;
+}
+```
+
+
+
+
+```
+// 获取类的类名
+const char *class_getName( Class cls );
+// 获取类的父类
+Class clas_getSuperClass( Class cls );
+// 判断给定的Class 是否是一个元类
+BOOL class_isMetaClass( Class cls );
+```
+
+```
+// 获取实例变量大小
+size_t class_getInstanceSize( Class cls );
+// 获取类中指定名称实例成员变量的信息
+Ivar class_getInstanceVariable( Class cls, const char *name ); 
+// 获取类成员变量的信息
+Ivar class_getClassVariable( Class cls, const char *name);
+// 获取整个成员变量列表
+Ivar *class_copyIvarList( Class cls, unsigned int *outCout);
+```
+
+```
+// 获取指定的属性
+objc_property_t class_getProperty( Class cls, const char *name);
+// 获取属性列表
+objc_property_t class_copyPropertyList( Class cls, unsigned int *outCount);
+// 为类添加属性
+BOOL class_addProperty( Class cls, const char *name, const )
+```
+
+```
+struct objc_class {
+    Class isa;                              // 元类
+    Class super_class;                      // 父类
+    const char *name;                       // 类名
+    long version;                           // 类的版本信息，默认为0
+    long info;                              // 类信息，供运行期使用的一些位标识
+    long instance_size;                     // 该类的实例变量大小
+    struct objc_ivar_list *ivars;           // 该类的成员变量链表
+    struct objc_method_list **methodLists;  // 方法定义的链表
+    struct objc_cache *cache;               // 方法缓存
+    struct objc_protocol_list *protocols;   // 协议链表
+};
+```
+
+```
+struct objc_object {
+    Class isa;
+};
+typedef struct objc_object *id;
+```
+
+```
+// 返回给定对象的类名
+const char *object_getClassName( id obj );
+// 返回对象的类
+Class object_getClass( id obj );
+// 设置对象的类
+Class object_setClass( id obj, Class cls );
+```
+
+
