@@ -181,10 +181,6 @@ Class object_setClass( id obj, Class cls );
 &emsp;实际上 `SEL`就是`const char *`,我们看到`sel_getName`和`sel_isEqual`的实现就能发现，其中`sel_getName`的实现方式就是直接把`SEL`转换成了`const char*`：
 ```
 const char *sel_getName(SEL sel) {
-    #if SUPPORT_IGNORED_SELECTOR_CONSTANT
-    if ((uintptr_t)sel == kIgnore) 
-        return "<ignored selector>";
-    #endif
     return sel ? (const char *)sel : "<null selector>";
 }
 
@@ -193,7 +189,7 @@ BOOL sel_isEqual(SEL lhs, SEL rhs){
 }
 ```
 #### `sel_registerName`做了什么事情
-`提醒⏰： ` 这不是正确的代码，为了方便理解我删去了加锁的代码。
+`提醒⏰：`  这不是正确的代码，为了方便理解我删去了加锁的代码。
 ```
 static SEL __sel_registerName(const char *name, int lock, int copy) {
     SEL result = 0;
@@ -236,7 +232,15 @@ struct objc_method {
     IMP method_imp;                         // 方法实现
 }
 ```
+
+```
+struct objc_method_description { 
+    SEL name; 
+    char *types; 
+};
+```
 &emsp;我们可以看到该结构体中包含了一个`SEL`和`IMP`，实际上相当于在`SEL`和`IMP`之间做了一个映射。有了`SEL`，我们便可以找到对应得`IMP`，从而调用方法的实现代码。
+#### `Method`的相关方法
 ```
 1. id method_invoke( id receiver, Method m, ... );                                          // 调用指定方法的实现
 2. SEL method_getName( Method m );                                                          // 获取方法名
@@ -251,10 +255,30 @@ struct objc_method {
 11. IMP method_setImplementation( Method m, IMP imp );                                      // 设置方法的实现
 12. void method_exchangeImplementations( Method m1, Method m2 );                            // 交换两个方法的实现
 ```
+`提醒⏰：` 一个小规律，`get`出来的值不用`free()`， `copy`出来的值一定要`free()。`
 
+#### 方法调用流程
+在`Objective-C`中，消息直到运行时才绑定到方法实现上。编译器会将消息表达式`[receiver message]`转化为一个消息函数的调用，即`objc_msgSend`。这个函数将`消息接收者`和`方法名`作为其`前两个参数`，如以下所示：
+```
+objc_msgSend(receiver, selector)                    // 该消息没有其他参数
+objc_msgSend(receiver, selector, arg1, arg2, ...)   // 如果消息中还有其它参数
+```
+这个函数完成了`动态绑定`的所有事情：
 
-### 一个小规律，`get`出来的值不用`free()`， `copy`出来的值一定要`free()`
+1. 首先它找到`selector`对应的方法实现。因为同一个方法可能在不同的类中有不同的实现，所以我们需要依赖于接收者的类来找到的确切的实现。
+2. 它`调用方法实现`，并将`接收者对象`及方法的所有参数传给它。
+3. 最后，它将实现返回的值作为它自己的返回值。
+消息的关键在于我们前面章节讨论过的结构体objc_class，这个结构体有两个字段是我们在分发消息的关注的：
 
+1. 指向父类的指针
+2. 一个类的方法分发表，即`methodLists`。
+当我们创建一个新对象时，先为其分配内存，并初始化其成员变量。其中isa指针也会被初始化，让对象可以访问类及类的继承体系。
+
+下图演示了这样一个消息的基本框架：
+![](FishhookAnalysis/images/objc_msgSend.png) 
+当消息发送给一个对象时，objc_msgSend通过对象的isa指针获取到类的结构体，然后在方法分发表里面查找方法的selector。如果没有找到selector，则通过objc_msgSend结构体中的指向父类的指针找到其父类，并在父类的分发表里面查找方法的selector。依此，会一直沿着类的继承体系到达NSObject类。一旦定位到selector，函数会就获取到了实现的入口点，并传入相应的参数来执行方法的具体实现。如果最后没有定位到selector，则会走消息转发流程，这个我们在后面讨论。
+
+为了加速消息的处理，运行时系统缓存使用过的selector及对应的方法的地址。这点我们在前面讨论过，不再重复。
 
 
 ### `Super`

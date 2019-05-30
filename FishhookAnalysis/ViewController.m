@@ -40,21 +40,8 @@ void newHookedNSLog(NSString *format, ...) {
 //        currentClass = object_getClass(currentClass);
 //        a = object_getClassName(currentClass);
 //    }
-    const char a[11] = "viewDidLoad";
-    const char b[11] = "viewDidLoad";
-     char *c = "viewDidLoad";
-     char *d = "viewDidLoad";
-    
-    SEL x = sel_registerName("aNme");
-    printf("%p %p %p %p", a, b, c, d);
-//    for(int i = 0;i < 50;i ++){
-//        NSLog(@"%c", sel_getName(@selector(viewDidLoad))[i]);
-//    }
-    
-//    for(int i = 0;i < 11;i ++){
-//        NSLog(@"%c", "viewDidLoad"[i]);
-//    }
-    
+    printf("%s skr", sel_getName(sel_registerName("")));
+    NSLog(@"something");
 //    struct rebinding nslogBind;
 //    nslogBind.name = "NSLog";
 //    nslogBind.replacement = hookedNSLog;

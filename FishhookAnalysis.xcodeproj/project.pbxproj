@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31251978229FF04A00FD773E /* objc_msgSend.png in Resources */ = {isa = PBXBuildFile; fileRef = 31251977229FF04A00FD773E /* objc_msgSend.png */; };
 		31A6CE7E22789B42007BBEDA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A6CE7D22789B42007BBEDA /* AppDelegate.m */; };
 		31A6CE8122789B42007BBEDA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A6CE8022789B42007BBEDA /* ViewController.m */; };
 		31A6CE8422789B42007BBEDA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31A6CE8222789B42007BBEDA /* Main.storyboard */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		31251977229FF04A00FD773E /* objc_msgSend.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = objc_msgSend.png; sourceTree = "<group>"; };
 		31A6CE7922789B42007BBEDA /* FishhookAnalysis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FishhookAnalysis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31A6CE7C22789B42007BBEDA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		31A6CE7D22789B42007BBEDA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				31B06A022293DB17004B9DB5 /* load_section.png */,
 				31B06A062293DB9E004B9DB5 /* section.png */,
 				31ED3F3F228F276A000DF212 /* fishhook.png */,
+				31251977229FF04A00FD773E /* objc_msgSend.png */,
 			);
 			path = images;
 			sourceTree = "<group>";
@@ -178,6 +181,7 @@
 				31B06A072293DB9E004B9DB5 /* section.png in Resources */,
 				31EE6127229798D200D94F61 /* macho.png in Resources */,
 				31B06A012293DADA004B9DB5 /* load_command.png in Resources */,
+				31251978229FF04A00FD773E /* objc_msgSend.png in Resources */,
 				31A6CE8922789B46007BBEDA /* LaunchScreen.storyboard in Resources */,
 				31ED3F42228F27FC000DF212 /* README.md in Resources */,
 				31A6CE8622789B46007BBEDA /* Assets.xcassets in Resources */,
