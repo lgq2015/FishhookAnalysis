@@ -178,7 +178,7 @@ Class object_setClass( id obj, Class cls );
 2. BOOL sel_isEqual(SEL lhs, SEL rhs);                                                      // 比较两个选择器是否相同
 3. SEL sel_registerName(const char *str);                                                   // 使用Objective-C Runtime系统注册方法，找到方法名对应的选择器，并返回该选择器值。
 ```
-&emsp;实际上 `SEL`就是`const char [](⚠️：并不是一个const chat *)`,我们看到`sel_getName`和`sel_isEqual`的实现就能发现，其中`sel_getName`的实现方式就是直接把`SEL`转换成了`const char*`：
+&emsp;实际上 `SEL`就是`const char *`,我们看到`sel_getName`和`sel_isEqual`的实现就能发现，其中`sel_getName`的实现方式就是直接把`SEL`转换成了`const char*`：
 ```
 const char *sel_getName(SEL sel) {
     #if SUPPORT_IGNORED_SELECTOR_CONSTANT
@@ -192,8 +192,34 @@ BOOL sel_isEqual(SEL lhs, SEL rhs){
     return (lhs == rhs) ? YES : NO;
 }
 ```
+#### `sel_registerName`做了什么事情
+`提醒⏰： ` 这不是正确的代码，为了方便理解我删去了加锁的代码。
+```
+static SEL __sel_registerName(const char *name, int lock, int copy) {
+    SEL result = 0;
+    if(!name) return (SEL)0;
+    
+    result = _objc_search_builtins(name);
+    if (result) return result;
+        
+    if (_objc_selectors) {
+        result = __objc_sel_set_get(_objc_selectors, (SEL)name);
+    }
+    if (result) return result;
 
+    // No match. Insert.
+    if (!_objc_selectors) {
+        _objc_selectors = __objc_sel_set_create(SelrefCount);
+    }
 
+    if (!result) {
+        result = (SEL)(copy ? _strdup_internal(name) : name);
+        __objc_sel_set_add(_objc_selectors, result);
+    }
+    return result;
+}
+```
+&emsp; 基本上就是在`selector`的`set`中查询选择器，如果找到了就返回查询到的，如果没有找到就插入一个新的选择器到这个`set`中。
 ### `IMP`
 &emsp;`IMP`实际上就是一个函数指针，指向方法实现的首地址。其定义如下：
 ```

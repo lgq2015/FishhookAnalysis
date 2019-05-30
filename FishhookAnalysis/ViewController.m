@@ -33,26 +33,27 @@ void newHookedNSLog(NSString *format, ...) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    Class currentClass = [self class];
-    const char *a = object_getClassName(currentClass);
-    for (int i = 1; i < 5; i++) {
-        NSLog(@"Following the isa pointer %d times gives %p---%s", i, currentClass,a);
-        currentClass = object_getClass(currentClass);
-        a = object_getClassName(currentClass);
-    }
+//    Class currentClass = [self class];
+//    const char *a = object_getClassName(currentClass);
+//    for (int i = 1; i < 5; i++) {
+//        NSLog(@"Following the isa pointer %d times gives %p---%s", i, currentClass,a);
+//        currentClass = object_getClass(currentClass);
+//        a = object_getClassName(currentClass);
+//    }
+    const char a[11] = "viewDidLoad";
+    const char b[11] = "viewDidLoad";
+     char *c = "viewDidLoad";
+     char *d = "viewDidLoad";
     
-    SEL aSelector = NSSelectorFromString(@"Cool");
-    //NSLog(@"%p", @selector(viewDidLoad));
-    //printf("%p %p", "viewDidLoad", sel_getName(@selector(viewDidLoad)));
+    SEL x = sel_registerName("aNme");
+    printf("%p %p %p %p", a, b, c, d);
+//    for(int i = 0;i < 50;i ++){
+//        NSLog(@"%c", sel_getName(@selector(viewDidLoad))[i]);
+//    }
     
-    if(strcmp("viewDidLoad", sel_getName(@selector(viewDidLoad)))){
-        NSLog(@"🥰");
-    }
-    NSLog(@"%d %d", strlen("viewDidLoad"),sel_getName(@selector(viewDidLoad)));
-    for(int i = 0;i < 50;i ++){
-        NSLog(@"%c", sel_getName(@selector(viewDidLoad))[i]);
-
-    }
+//    for(int i = 0;i < 11;i ++){
+//        NSLog(@"%c", "viewDidLoad"[i]);
+//    }
     
 //    struct rebinding nslogBind;
 //    nslogBind.name = "NSLog";
