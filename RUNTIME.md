@@ -296,11 +296,41 @@ objc_msgSend(receiver, selector, arg1, arg2, ...)   // 如果消息中还有其�
     return [target performSelector:method];
 }
 ```
-&emsp;`self`的用处不必多言，我们经常要使用，而`_cmd`的用处相对而言就小很多多了，一般都是用来获取当前方法名(但如果只是要打印出来方法名，可以使用 `__PRETTY_FUNCTION__`)。
+&emsp;`self`的用处不必多言，我们经常要使用，而`_cmd`的用处相对而言就小很多了，一般都是用来获取当前方法名(但如果只是要打印出来方法名，可以使用 `__PRETTY_FUNCTION__`)。
 ```
 NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
 NSLog(@"%s", __PRETTY_FUNCTION__); 
 ```
+#### 获取方法地址
+&emsp;`Runtime`中方法的动态绑定让我们写代码时更具灵活性，如我们可以把`消息转发`给我们想要的对象，或者随意`交换`一个方法的实现等。`不过灵活性的提升也带来了性能上的一些损耗`。毕竟我们需要去查找方法的实现，而不像函数调用来得那么直接。当然，方法的缓存一定程度上解决了这一问题。
+
+&emsp;我们上面提到过，如果想要避开这种动态绑定方式，我们可以获取方法实现的地址，然后像调用函数一样来直接调用它。**`特别是当我们需要在一个循环内频繁地调用一个特定的方法时，通过这种方式可以提高程序的性能`**。
+
+&emsp;`NSObject类`提供了`methodForSelector:`方法，让我们可以获取到方法的指针，然后通过这个指针来调用实现代码。我们需要将methodForSelector:返回的指针转换为合适的函数类型，函数参数和返回值都需要匹配上。
+
+```
+// NSObject 
+- (BOOL)respondsToSelector:(SEL)aSelector;
++ (BOOL)instancesRespondToSelector:(SEL)aSelector;
+- (IMP)methodForSelector:(SEL)aSelector;
++ (IMP)instanceMethodForSelector:(SEL)aSelector;
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector;
++ (NSMethodSignature *)instanceMethodSignatureForSelector:(SEL)aSelector;
+```
+
+&emsp; You cannot test whether an object inherits a method from its superclass by sending `respondsToSelector:`to the object using the `super` keyword. This method will still be testing the object as a whole, not just the superclass’s implementation. Therefore, sending `respondsToSelector:` to `super` is equivalent to sending it to `self`. Instead, you must invoke the `NSObject` class method `instancesRespondToSelector:` directly on the object’s superclass, as illustrated in the following code fragment.
+```
+if( [MySuperclass instancesRespondToSelector:@selector(aMethod)] ) {
+    // invoke the inherited method
+    [super aMethod];
+}
+
+if ([[self superclass] instancesRespondToSelector:@selector(aMethod)] ){
+    [super aMethod:];
+}
+```
+
+
 
 
 ### `Super`

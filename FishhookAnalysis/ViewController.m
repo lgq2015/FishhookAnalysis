@@ -40,8 +40,19 @@ void newHookedNSLog(NSString *format, ...) {
 //        currentClass = object_getClass(currentClass);
 //        a = object_getClassName(currentClass);
 //    }
-    printf("%s skr", sel_getName(sel_registerName("")));
-    NSLog(@"something");
+    
+    if([ViewController respondsToSelector:@selector(classPrintEmoji:)]){
+        NSLog(@"YES");
+    }
+    
+    //[ViewController classPrintEmoji];
+
+    void (*printE)(id, SEL, BOOL);
+    printE = (void (*)(id, SEL, BOOL))[self methodForSelector:@selector(classPrintEmoji:)];
+    //printE = (void (*)(id, SEL))[ViewController instanceMethodForSelector:@selector(classPrintEmoji)];
+    for ( int i = 0 ; i < 10 ; i++ )
+        printE([self class], @selector(classPrintEmoji:), YES);
+    
 //    struct rebinding nslogBind;
 //    nslogBind.name = "NSLog";
 //    nslogBind.replacement = hookedNSLog;
@@ -56,13 +67,16 @@ void newHookedNSLog(NSString *format, ...) {
 
 }
 
-+ (void) classMethod {
-    NSLog(@" class %p ", self);
+- (void)printEmoji {
+    NSLog(@"%@", @"🏃‍♂️");
 }
 
++ (void)classPrintEmoji: (BOOL)isTrue {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    NSLog(@"%@ %@", self, @"🍺");
+}
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     NSLog(@"点击屏幕");
-    [ViewController classMethod];
     NSLog(@"%p %p", self, [self class]);
 }
 
