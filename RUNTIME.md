@@ -213,7 +213,20 @@ struct objc_method {
 2. BOOL sel_isEqual(SEL lhs, SEL rhs);                                                      // 比较两个选择器是否相同
 3. SEL sel_registerName(const char *str);                                                   // 使用Objective-C Runtime系统注册方法，找到方法名对应的选择器，并返回该选择器值。
 ```
+&emsp;实际上 `SEL`就是`const char *`，我们看到`sel_getName`和`sel_isEqual`的实现就能发现，其中`sel_getName`的实现方式就是直接把`SEL`转换成了`const char*`：
+```
+const char *sel_getName(SEL sel) {
+    #if SUPPORT_IGNORED_SELECTOR_CONSTANT
+    if ((uintptr_t)sel == kIgnore) 
+        return "<ignored selector>";
+    #endif
+    return sel ? (const char *)sel : "<null selector>";
+}
 
+BOOL sel_isEqual(SEL lhs, SEL rhs){
+    return (lhs == rhs) ? YES : NO;
+}
+```
 
 
 ### `Super`
