@@ -165,14 +165,35 @@ Class object_setClass( id obj, Class cls );
 -(void)setWidthWidthIntValue:(int)width;
 -(void)setWidthWidthDoubleValue: (double)width;
 ```
-
-
+#### 获取`selector`的方法
 ```
-// 获取selector的方法
 1. sel_registerName函数
 2. Objective-C编译器提供的@selector()
 3. NSSelectorFromString()方法
 ```
+
+#### `SEL`的相关方法
+```
+1. const char * sel_getName(SEL sel);                                                       // 获得选择器指定的方法的名字
+2. BOOL sel_isEqual(SEL lhs, SEL rhs);                                                      // 比较两个选择器是否相同
+3. SEL sel_registerName(const char *str);                                                   // 使用Objective-C Runtime系统注册方法，找到方法名对应的选择器，并返回该选择器值。
+```
+&emsp;实际上 `SEL`就是`const char *`，我们看到`sel_getName`和`sel_isEqual`的实现就能发现，其中`sel_getName`的实现方式就是直接把`SEL`转换成了`const char*`：
+```
+const char *sel_getName(SEL sel) {
+    #if SUPPORT_IGNORED_SELECTOR_CONSTANT
+    if ((uintptr_t)sel == kIgnore) 
+        return "<ignored selector>";
+    #endif
+    return sel ? (const char *)sel : "<null selector>";
+}
+
+BOOL sel_isEqual(SEL lhs, SEL rhs){
+    return (lhs == rhs) ? YES : NO;
+}
+```
+
+
 ### `IMP`
 &emsp;`IMP`实际上就是一个函数指针，指向方法实现的首地址。其定义如下：
 ```
@@ -208,25 +229,6 @@ struct objc_method {
 
 ### 一个小规律，`get`出来的值不用`free()`， `copy`出来的值一定要`free()`
 
-```
-1. const char * sel_getName(SEL sel);                                                       // 获得选择器指定的方法的名字
-2. BOOL sel_isEqual(SEL lhs, SEL rhs);                                                      // 比较两个选择器是否相同
-3. SEL sel_registerName(const char *str);                                                   // 使用Objective-C Runtime系统注册方法，找到方法名对应的选择器，并返回该选择器值。
-```
-&emsp;实际上 `SEL`就是`const char *`，我们看到`sel_getName`和`sel_isEqual`的实现就能发现，其中`sel_getName`的实现方式就是直接把`SEL`转换成了`const char*`：
-```
-const char *sel_getName(SEL sel) {
-    #if SUPPORT_IGNORED_SELECTOR_CONSTANT
-    if ((uintptr_t)sel == kIgnore) 
-        return "<ignored selector>";
-    #endif
-    return sel ? (const char *)sel : "<null selector>";
-}
-
-BOOL sel_isEqual(SEL lhs, SEL rhs){
-    return (lhs == rhs) ? YES : NO;
-}
-```
 
 
 ### `Super`
