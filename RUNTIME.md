@@ -154,7 +154,7 @@ Class object_setClass( id obj, Class cls );
     typedef struct objc_selector *SEL;
 ```
 &emsp;`objc_selector`结构体的详细定义并没有暴露出来，但是我们知道方法的`selector`用于表示运行时方法的名字。`Objective-C`在编译的时候，会根据每一个方法的名字，参数序列，生成一个唯一的标识。
-两个类之间，不管它们是父类与子类的关系，还是没有这种关系，只要方法名相同，这两个方法`SEL`就是一样的。所以`Objective-C同一个类不能存在两个同名的方法，即使参数类型不同也不行`。当然啦，不同的类可以拥有相同的`selector`，不同类的实例对象执行相同的`selector`时，会在各自的方法列表中根据`selector`去寻找对应的`IMP`。
+两个类之间，不管它们是父类与子类的关系，还是没有这种关系，只要方法名相同，这两个方法`SEL`就是一样的。所以`Objective-C同一个类不能存在两个同名的方法，即使参数类型不同也不行`。当然啦，不同的类可以拥有相同的`selector`，不同类的实例对象执行相同的`selector`时，会在各自的方法列表中，根据`selector`去寻找对应的`IMP`。
 
 ```
 // C++ 风格
@@ -178,7 +178,7 @@ Class object_setClass( id obj, Class cls );
 2. BOOL sel_isEqual(SEL lhs, SEL rhs);                                                      // 比较两个选择器是否相同
 3. SEL sel_registerName(const char *str);                                                   // 使用Objective-C Runtime系统注册方法，找到方法名对应的选择器，并返回该选择器值。
 ```
-&emsp;实际上 `SEL`就是`const char *`，我们看到`sel_getName`和`sel_isEqual`的实现就能发现，其中`sel_getName`的实现方式就是直接把`SEL`转换成了`const char*`：
+&emsp;实际上 `SEL`就是`const char [](⚠️：并不是一个const chat *)`,我们看到`sel_getName`和`sel_isEqual`的实现就能发现，其中`sel_getName`的实现方式就是直接把`SEL`转换成了`const char*`：
 ```
 const char *sel_getName(SEL sel) {
     #if SUPPORT_IGNORED_SELECTOR_CONSTANT

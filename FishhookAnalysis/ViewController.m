@@ -42,9 +42,18 @@ void newHookedNSLog(NSString *format, ...) {
     }
     
     SEL aSelector = NSSelectorFromString(@"Cool");
-    printf("%s", (const char*)aSelector);
+    //NSLog(@"%p", @selector(viewDidLoad));
+    //printf("%p %p", "viewDidLoad", sel_getName(@selector(viewDidLoad)));
     
-  
+    if(strcmp("viewDidLoad", sel_getName(@selector(viewDidLoad)))){
+        NSLog(@"🥰");
+    }
+    NSLog(@"%d %d", strlen("viewDidLoad"),sel_getName(@selector(viewDidLoad)));
+    for(int i = 0;i < 50;i ++){
+        NSLog(@"%c", sel_getName(@selector(viewDidLoad))[i]);
+
+    }
+    
 //    struct rebinding nslogBind;
 //    nslogBind.name = "NSLog";
 //    nslogBind.replacement = hookedNSLog;
