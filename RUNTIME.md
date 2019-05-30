@@ -279,9 +279,28 @@ objc_msgSend(receiver, selector, arg1, arg2, ...)   // 如果消息中还有其�
 
 ![](FishhookAnalysis/images/objc_msgSend.png) 
 
-当消息发送给一个对象时，`objc_msgSend`通过对象的`isa`指针获取到`类的结构体`，然后在`方法分发表`里面查找方法的`selector`。如果没有找到`selector`，则通过`类的结构体`中的指向父类的指针找到其父类，并在父类的`方法分发表`里面查找方法的`selector`。依此，会一直沿着类的继承体系到达`NSObject`类。一旦定位到`selector`，函数会就获取到了`实现(IMP)`的入口点，并传入相应的参数来执行方法的具体实现。如果最后没有定位到`selector`，则会进入`消息转发流程`，这个我们在后面讨论。
+&emsp;当消息发送给一个对象时，`objc_msgSend`通过对象的`isa`指针获取到`类的结构体`，然后在`方法分发表`里面查找方法的`selector`。如果没有找到`selector`，则通过`类的结构体`中的指向父类的指针找到其父类，并在父类的`方法分发表`里面查找方法的`selector`。依此，会一直沿着类的继承体系到达`NSObject`类。一旦定位到`selector`，函数会就获取到了`实现(IMP)`的入口点，并传入相应的参数来执行方法的具体实现。如果最后没有定位到`selector`，则会进入`消息转发流程`，这个我们在后面讨论。
 
 为了加速消息的处理，运行时系统`缓存`使用过的`selector`及`对应的方法的地址`。
+#### 隐含参数
+`objc_msgSend`有两个隐藏参数：
+1. `消息接收对象(receiver)`
+2. 方法的`选择器(selector)`
+&emsp;这两个参数为方法的`实现(IMP)`提供了调用者的信息。之所以说是隐藏的，是因为它们在定义方法的源代码中没有声明。它们是在编译期被插入实现代码的。虽然这些参数没有显示声明，但在代码中仍然可以引用它们。我们可以使用`self`来引用接收者对象，使用`_cmd`来引用选择器。如下代码所示：
+```
+- strange{
+    id  target = getTheReceiver();
+    SEL method = getTheMethod();
+    if ( target == self || method == _cmd )
+        return nil;
+    return [target performSelector:method];
+}
+```
+&emsp;`self`的用处不必多言，我们经常要使用，而`_cmd`的用处相对而言就小很多多了，一般都是用来获取当前方法名(但如果只是要打印出来方法名，可以使用 `__PRETTY_FUNCTION__`)。
+```
+NSLog(@"<%@:%@:%d>", NSStringFromClass([self class]), NSStringFromSelector(_cmd), __LINE__);
+NSLog(@"%s", __PRETTY_FUNCTION__); 
+```
 
 
 ### `Super`
