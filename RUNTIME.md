@@ -318,7 +318,10 @@ NSLog(@"%s", __PRETTY_FUNCTION__);
 + (NSMethodSignature *)instanceMethodSignatureForSelector:(SEL)aSelector;
 ```
 
-&emsp; You cannot test whether an object inherits a method from its superclass by sending `respondsToSelector:`to the object using the `super` keyword. This method will still be testing the object as a whole, not just the superclass’s implementation. Therefore, sending `respondsToSelector:` to `super` is equivalent to sending it to `self`. Instead, you must invoke the `NSObject` class method `instancesRespondToSelector:` directly on the object’s superclass, as illustrated in the following code fragment.
+
+&emsp; You cannot test whether an object inherits a method from its superclass by sending `respondsToSelector:`to the object using the `super` keyword. This method will still be testing the object as a whole, not just the superclass’s implementation. Therefore, sending `respondsToSelector:` to `super` is equivalent to sending it to `self`. Instead, you must invoke the `NSObject` class method `instancesRespondToSelector:` directly on the object’s superclass, as illustrated in the following code fragment.‘
+
+&emsp;您无法通过使用`super`关键字向对象发送`respondsToSelector：`来测试对象是否从其超类继承到某方法。 这个方法仍然会测试整个对象，而不仅仅是超类的实现。 因此，将`respondsToSelector：`发送到`super`就相当于将它发送给`self`。 相反，您必须直接在对象的超类上调用`NSObject`类方法`instancesRespondToSelector：`，如下面的代码片段所示。
 ```
 if( [MySuperclass instancesRespondToSelector:@selector(aMethod)] ) {
     // invoke the inherited method
@@ -329,10 +332,6 @@ if ([[self superclass] instancesRespondToSelector:@selector(aMethod)] ){
     [super aMethod:];
 }
 ```
-
-
-
-
 ### `Super`
 &emsp; 在`Objective-C`中，如果我们需要在类的方法中调用父类的方法，通常都会用到`super`
 ```
@@ -353,3 +352,45 @@ struct objc_super {
 id objc_msgSendSuper(struct objc_super *super, SEL op, ... );
 ```
 &emsp;该函数的实际操作是： 从`objc_super`结构题体向的`superClass`的方法列表开始查找`viewDidLoad`的`selector`，找到之后`objc_super->receiver`去调用这个`selector`。
+
+
+#### 消息转发
+&emsp;当一个对象能接收一个消息时，就会走正常的方法调用流程。但如果一个对象无法接收指定消息时，又会发生什么事呢？默认情况下，如果是以`[object message]`的方式调用方法，如果`object`无法响应`message`消息时，编译器会报错。但如果是以`perform…`的形式来调用，则需要等到`运行时`才能确定`object`是否能接收`message`消息。如果不能，则程序崩溃。
+```
+- (id)performSelector:(SEL)aSelector;
+- (id)performSelector:(SEL)aSelector withObject:(id)object;
+- (id)performSelector:(SEL)aSelector withObject:(id)object1 withObject:(id)object2;
+... 
+```
+通常，当我们不能确定一个对象是否能接收某个消息时，会先调用`respondsToSelector:`来判断一下。如下代码所示：
+```
+if ([self respondsToSelector:@selector(method)]) {
+    [self performSelector:@selector(method)];
+}
+```
+&emsp;当一个对象无法接收某一消息时，就会启动所谓`"消息转发(message forwarding)"`机制，**`通过这一机制，我们可以告诉对象如何处理未知的消息`**。默认情况下，对象接收到未知的消息，会导致程序崩溃，通过控制台，我们可以看到以下异常信息: `unrecognized selector sent to instance 0x100111940`。 这段异常信息实际上是由`NSObject`的`doesNotRecognizeSelector`方法抛出的。不过，我们可以采取一些措施，让我们的程序执行特定的逻辑，而避免程序的崩溃。
+
+消息转发机制基本上分为三个步骤：
+
+1. 动态方法解析
+2. 备用接收者
+3. 完整转发
+下面我们详细讨论一下这三个步骤。
+
+##### 动态方法解析
+&emsp;对象在接收到未知的消息时，首先会调用所属类的类方法`+resolveInstanceMethod:(实例方法)`或者`+resolveClassMethod:(类方法)`。在这个方法中，我们有机会为该未知消息新增一个`"处理方法"`。不过使用该方法的前提是我们已经实现了该`”处理方法”`，只需要在运行时通过`class_addMethod`函数动态添加到类里面就可以了。如下代码所示：
+```
+void functionForMethod1(id self, SEL _cmd) {
+    NSLog(@"%@, %p", self, _cmd);
+}
+
++ (BOOL)resolveInstanceMethod:(SEL)sel {
+    NSString *selectorString = NSStringFromSelector(sel);
+    if ([selectorString isEqualToString:@"method1"]) {
+        class_addMethod(self.class, @selector(method1), (IMP)functionForMethod1, "v@:");
+    }
+    return [super resolveInstanceMethod:sel];
+}
+```
+&emsp; 但是`动态方法解析`更多的被用来实现`@dynamic`属性。
+##### 备用接收者

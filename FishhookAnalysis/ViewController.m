@@ -46,7 +46,9 @@ void newHookedNSLog(NSString *format, ...) {
     }
     
     //[ViewController classPrintEmoji];
-
+    
+    
+    
     void (*printE)(id, SEL, BOOL);
     printE = (void (*)(id, SEL, BOOL))[self methodForSelector:@selector(classPrintEmoji:)];
     //printE = (void (*)(id, SEL))[ViewController instanceMethodForSelector:@selector(classPrintEmoji)];
