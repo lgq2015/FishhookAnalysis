@@ -41,19 +41,17 @@ void newHookedNSLog(NSString *format, ...) {
 //        a = object_getClassName(currentClass);
 //    }
     
-    if([ViewController respondsToSelector:@selector(classPrintEmoji:)]){
-        NSLog(@"YES");
-    }
     
     //[ViewController classPrintEmoji];
+    if([ViewController instancesRespondToSelector:@selector(viewDidAppear:)]){
+        NSLog(@"🚅");
+    }else{
+        NSLog(@"FIVE");
+    }
     
     
     
-    void (*printE)(id, SEL, BOOL);
-    printE = (void (*)(id, SEL, BOOL))[self methodForSelector:@selector(classPrintEmoji:)];
-    //printE = (void (*)(id, SEL))[ViewController instanceMethodForSelector:@selector(classPrintEmoji)];
-    for ( int i = 0 ; i < 10 ; i++ )
-        printE([self class], @selector(classPrintEmoji:), YES);
+    
     
 //    struct rebinding nslogBind;
 //    nslogBind.name = "NSLog";
