@@ -9,6 +9,8 @@
 #include <mach-o/dyld.h>
 #import "ViewController.h"
 #import "fishhook.h"
+#import "classes/Vehicle.h"
+#import "classes/Car.h"
 #import <objc/runtime.h>
 static void (*originalNSLog)(NSString *format, ...);
 static void (*originalNSLog2)(NSString *format, ...);
@@ -22,6 +24,10 @@ void hookedNSLog(NSString *format, ...) {
 void newHookedNSLog(NSString *format, ...) {
     NSString* hookedString = [format stringByAppendingString:@"  Hooked!! 🐶🐶🐶🐶"];
     originalNSLog2(hookedString);
+}
+
+void functionForMethod1(id self, SEL _cmd) {
+    NSLog(@"%@, %p", self, _cmd);
 }
 
 
@@ -40,19 +46,7 @@ void newHookedNSLog(NSString *format, ...) {
 //        currentClass = object_getClass(currentClass);
 //        a = object_getClassName(currentClass);
 //    }
-    
-    
-    //[ViewController classPrintEmoji];
-    if([ViewController instancesRespondToSelector:@selector(viewDidAppear:)]){
-        NSLog(@"🚅");
-    }else{
-        NSLog(@"FIVE");
-    }
-    
-    
-    
-    
-    
+
 //    struct rebinding nslogBind;
 //    nslogBind.name = "NSLog";
 //    nslogBind.replacement = hookedNSLog;
@@ -65,16 +59,36 @@ void newHookedNSLog(NSString *format, ...) {
 //    struct rebinding rebs[] = {nslogBind};
 //    rebind_symbols(rebs, 1);
 
+//    Vehicle* vehicle = [[Vehicle alloc] init];
+//    [vehicle performSelector:@selector(fly)];
+    Car* car = [[Car alloc] init];
+    [car performSelector:@selector(fly)];
+    //[self performSelector:@selector(testMethod)];
 }
 
-- (void)printEmoji {
-    NSLog(@"%@", @"🏃‍♂️");
++ (BOOL)resolveInstanceMethod:(SEL)sel {
+    NSString *selectorString = NSStringFromSelector(sel);
+    if( [selectorString isEqualToString:@"testMethod"] ){
+        class_addMethod(self.class, sel, (IMP)functionForMethod1, "v@:");
+    }
+    
+    BOOL result = [super resolveInstanceMethod:sel];
+    if(result){
+        NSLog(@"%@ 🥺", selectorString);
+    }else{
+        NSLog(@"%@ 🐶🐶🐶🏃‍♂️",selectorString);
+    }
+    return result;
 }
 
-+ (void)classPrintEmoji: (BOOL)isTrue {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSLog(@"%@ %@", self, @"🍺");
+
+- (id)forwardingTargetForSelector:(SEL)aSelector {
+    NSLog(@"FORWARDING: %@", NSStringFromSelector(aSelector));
+    return [super forwardingTargetForSelector:aSelector];
 }
+
+
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     NSLog(@"点击屏幕");
     NSLog(@"%p %p", self, [self class]);

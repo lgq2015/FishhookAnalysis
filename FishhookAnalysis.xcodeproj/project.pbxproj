@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		310CBF0E22A2784E001F4B26 /* Vehicle.m in Sources */ = {isa = PBXBuildFile; fileRef = 310CBF0D22A2784E001F4B26 /* Vehicle.m */; };
+		310CBF1122A27B26001F4B26 /* Car.m in Sources */ = {isa = PBXBuildFile; fileRef = 310CBF1022A27B26001F4B26 /* Car.m */; };
 		31251978229FF04A00FD773E /* objc_msgSend.png in Resources */ = {isa = PBXBuildFile; fileRef = 31251977229FF04A00FD773E /* objc_msgSend.png */; };
 		31A6CE7E22789B42007BBEDA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A6CE7D22789B42007BBEDA /* AppDelegate.m */; };
 		31A6CE8122789B42007BBEDA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31A6CE8022789B42007BBEDA /* ViewController.m */; };
@@ -29,6 +31,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		310CBF0C22A2784E001F4B26 /* Vehicle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vehicle.h; sourceTree = "<group>"; };
+		310CBF0D22A2784E001F4B26 /* Vehicle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Vehicle.m; sourceTree = "<group>"; };
+		310CBF0F22A27B26001F4B26 /* Car.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Car.h; sourceTree = "<group>"; };
+		310CBF1022A27B26001F4B26 /* Car.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Car.m; sourceTree = "<group>"; };
 		31251977229FF04A00FD773E /* objc_msgSend.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = objc_msgSend.png; sourceTree = "<group>"; };
 		31A6CE7922789B42007BBEDA /* FishhookAnalysis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FishhookAnalysis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31A6CE7C22789B42007BBEDA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -66,6 +72,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		310CBF0922A27791001F4B26 /* classes */ = {
+			isa = PBXGroup;
+			children = (
+				310CBF0C22A2784E001F4B26 /* Vehicle.h */,
+				310CBF0D22A2784E001F4B26 /* Vehicle.m */,
+				310CBF0F22A27B26001F4B26 /* Car.h */,
+				310CBF1022A27B26001F4B26 /* Car.m */,
+			);
+			path = classes;
+			sourceTree = "<group>";
+		};
 		31A6CE7022789B42007BBEDA = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				31ED3F3E228F274D000DF212 /* images */,
+				310CBF0922A27791001F4B26 /* classes */,
 				31A6CE9222789B85007BBEDA /* fishhook.c */,
 				31A6CE9322789B85007BBEDA /* fishhook.h */,
 				31A6CE7C22789B42007BBEDA /* AppDelegate.h */,
@@ -202,10 +220,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				310CBF1122A27B26001F4B26 /* Car.m in Sources */,
 				31A6CE8122789B42007BBEDA /* ViewController.m in Sources */,
 				31A6CE8C22789B46007BBEDA /* main.m in Sources */,
 				31A6CE9422789B85007BBEDA /* fishhook.c in Sources */,
 				31A6CE7E22789B42007BBEDA /* AppDelegate.m in Sources */,
+				310CBF0E22A2784E001F4B26 /* Vehicle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
