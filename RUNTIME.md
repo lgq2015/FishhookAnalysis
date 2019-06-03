@@ -456,6 +456,13 @@ void functionForMethod1(id self, SEL _cmd) {
 + (NSInvocation *)invocationWithMethodSignature:(NSMethodSignature *)sig;
 ```
 
+#### `Type Encoding`
+
+| `Code`| `Meaning`      
+|----------|:-------------:|
+| `c`| A char |
+
+
 
 
 #### 最后一步

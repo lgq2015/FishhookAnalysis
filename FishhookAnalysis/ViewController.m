@@ -76,7 +76,7 @@ void functionForMethod1(id self, SEL _cmd) {
 
 + (BOOL)resolveInstanceMethod:(SEL)sel {
     NSString *selectorString = NSStringFromSelector(sel);
-    NSLog(@"%@ 🐶🐶🐶🏃‍♂️",selectorString);
+    NSLog(@"RESOVING: %@",selectorString);
     return [super respondsToSelector:sel];
 }
 
@@ -86,6 +86,10 @@ void functionForMethod1(id self, SEL _cmd) {
     return [super forwardingTargetForSelector:aSelector];
 }
 
+- (NSMethodSignature*) methodSignatureForSelector:(SEL)aSelector {
+    NSLog(@"METHOD SIGNATURE: %@", NSStringFromSelector(aSelector));
+    return [super methodSignatureForSelector:aSelector];
+}
 
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -95,9 +99,6 @@ void functionForMethod1(id self, SEL _cmd) {
 }
 
 
-//- (NSMethodSignature*) methodSignatureForSelector:(SEL)aSelector {
-//    NSLog(@"Get Called %@", NSStringFromSelector(aSelector));
-//    return [super methodSignatureForSelector:aSelector];
-//}
+
 
 @end
