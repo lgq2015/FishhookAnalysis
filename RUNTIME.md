@@ -460,7 +460,16 @@ void functionForMethod1(id self, SEL _cmd) {
 
 | `Code`| `Meaning`      
 |----------|:-------------:|
-| `c`| A char |
+| c | A `char` |
+| i | An `int` |
+| s | A `short`|
+| l | A `long` |
+| q | A `long long`|
+| C| A `unsigned char`|
+I I | An `unsigned int`|
+|S| An `unsigned short`|
+|L| An `unsigned long`|
+|Q| An `unsigned long long`|
 
 
 
