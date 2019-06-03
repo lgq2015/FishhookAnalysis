@@ -460,30 +460,30 @@ void functionForMethod1(id self, SEL _cmd) {
 
 | `Code`| `Meaning`      
 |-|:-------------:|
-|c| A `char` |
-|i| An `int` |
-|s| A `short`|
-|l| A `long` |
-|q| A `long long`|
-|C| A `unsigned char`|
-|I| An `unsigned int`|
-|S| An `unsigned short`|
-|L| An `unsigned long`|
-|Q| An `unsigned long long`|
-|f|A `float`|
-|d|A `double`|
-|B|A `C++ bool` or `C99 _Bool`|
-|v|A `void`|
-|*|A `character string(char *)`|
-|@|An `object(wheter statically typed or typed id)`|
-|#|An `class object(Class)`|
-|:|A `method selector(SEL)`|
-|[`array type`]|An `array`|
-|{`name = type`}|An `struct`|
-|(`name = type`)|An `union`|
-|b`num`|A `bit field of num bits`|
-|^`type`|A `pointer to type`|
-|?|A `unknown type(among other thing, this code is used for function pointers)`|
+|`c`| A `char` |
+|`i`| An `int` |
+|`s`| A `short`|
+|`l`| A `long` |
+|`q`| A `long long`|
+|`C`| A `unsigned char`|
+|`I`| An `unsigned int`|
+|`S`| An `unsigned short`|
+|`L`| An `unsigned long`|
+|`Q`| An `unsigned long long`|
+|`f`|A `float`|
+|`d`|A `double`|
+|`B`|A `C++ bool` or `C99 _Bool`|
+|`v`|A `void`|
+|`*`|A `character string(char *)`|
+|`@`|An `object(wheter statically typed or typed id)`|
+|`#`|An `class object(Class)`|
+|`:`|A `method selector(SEL)`|
+|`[array type]`|An `array`|
+|`{name = type}`|An `struct`|
+|`(name = type)`|An `union`|
+|`bnum`|A `bit field of num bits`|
+|`^type`|A `pointer to type`|
+|`?`|A `unknown type(among other thing, this code is used for function pointers)`|
 
 
 
