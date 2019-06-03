@@ -449,8 +449,12 @@ void functionForMethod1(id self, SEL _cmd) {
 
 还有一个很重要的问题，我们必须重写以下方法：
 ```
-- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector;
++ (NSMethodSignature *)signatureWithObjCTypes:(const char *)types;
++ (NSInvocation *)invocationWithMethodSignature:(NSMethodSignature *)sig;
 ```
+
+
 
 #### 最后一步
 ```

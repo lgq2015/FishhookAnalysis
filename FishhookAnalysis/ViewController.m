@@ -61,8 +61,10 @@ void functionForMethod1(id self, SEL _cmd) {
 
 //    Vehicle* vehicle = [[Vehicle alloc] init];
 //    [vehicle performSelector:@selector(fly)];
-    Car* car = [[Car alloc] init];
-    [car performSelector:@selector(fly)];
+    
+    
+//    Car* car = [[Car alloc] init];
+//    [car performSelector:@selector(fly)];
     //[self performSelector:@selector(testMethod)];
 }
 
@@ -92,7 +94,13 @@ void functionForMethod1(id self, SEL _cmd) {
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     NSLog(@"点击屏幕");
     NSLog(@"%p %p", self, [self class]);
+    NSLog(@"%@", [self methodSignatureForSelector:@selector(viewDidAppear:)]);
 }
 
+
+- (NSMethodSignature*) methodSignatureForSelector:(SEL)aSelector {
+    NSLog(@"Get Called %@", NSStringFromSelector(aSelector));
+    return [super methodSignatureForSelector:aSelector];
+}
 
 @end
