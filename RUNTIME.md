@@ -377,7 +377,9 @@ void functionForMethod1(id self, SEL _cmd) {
     return [super resolveInstanceMethod:sel];
 }
 ```
-&emsp; 但是`动态方法解析`更多的被用来实现`@dynamic`属性。
+&emsp; 但是`动态方法解析`更多的被用来实现`@dynamic`属性，并且在我看来这一步有点不属于`消息转发`的范畴，因为如果我们在消息内直接触发转发机制，如直接调用`_objc_msgForward()`，程序并不会执行`动态方法解析`。
+
+
 #### 备用接收者(快速转发)
 &emsp; 如果在上一步无法处理消息，则`Runtime`会继续调以下方法：
 ```

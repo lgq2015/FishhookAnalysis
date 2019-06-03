@@ -12,6 +12,7 @@
 #import "classes/Vehicle.h"
 #import "classes/Car.h"
 #import <objc/runtime.h>
+#import <objc/message.h>
 static void (*originalNSLog)(NSString *format, ...);
 static void (*originalNSLog2)(NSString *format, ...);
 
@@ -66,21 +67,17 @@ void functionForMethod1(id self, SEL _cmd) {
 //    Car* car = [[Car alloc] init];
 //    [car performSelector:@selector(fly)];
     //[self performSelector:@selector(testMethod)];
+    [self testForwarding];
+}
+
+- (void) testForwarding {
+    _objc_msgForward();
 }
 
 + (BOOL)resolveInstanceMethod:(SEL)sel {
     NSString *selectorString = NSStringFromSelector(sel);
-    if( [selectorString isEqualToString:@"testMethod"] ){
-        class_addMethod(self.class, sel, (IMP)functionForMethod1, "v@:");
-    }
-    
-    BOOL result = [super resolveInstanceMethod:sel];
-    if(result){
-        NSLog(@"%@ 🥺", selectorString);
-    }else{
-        NSLog(@"%@ 🐶🐶🐶🏃‍♂️",selectorString);
-    }
-    return result;
+    NSLog(@"%@ 🐶🐶🐶🏃‍♂️",selectorString);
+    return [super respondsToSelector:sel];
 }
 
 
@@ -98,9 +95,9 @@ void functionForMethod1(id self, SEL _cmd) {
 }
 
 
-- (NSMethodSignature*) methodSignatureForSelector:(SEL)aSelector {
-    NSLog(@"Get Called %@", NSStringFromSelector(aSelector));
-    return [super methodSignatureForSelector:aSelector];
-}
+//- (NSMethodSignature*) methodSignatureForSelector:(SEL)aSelector {
+//    NSLog(@"Get Called %@", NSStringFromSelector(aSelector));
+//    return [super methodSignatureForSelector:aSelector];
+//}
 
 @end
