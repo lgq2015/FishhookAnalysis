@@ -459,7 +459,7 @@ void functionForMethod1(id self, SEL _cmd) {
 #### `Type Encoding`
 
 | `Code`| `Meaning`      
-|----------|:-------------:|
+|-|:-------------:|
 |c| A `char` |
 |i| An `int` |
 |s| A `short`|
