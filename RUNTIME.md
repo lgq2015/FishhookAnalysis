@@ -478,13 +478,13 @@ void functionForMethod1(id self, SEL _cmd) {
 |`@`|An `object(wheter statically typed or typed id)`|
 |`#`|An `class object(Class)`|
 |`:`|A `method selector(SEL)`|
-|`[array type]`|An `array`|
+|`[array type]`|An `array`|sasasa
 |`{name = type}`|An `struct`|
 |`(name = type)`|An `union`|
 |`bnum`|A `bit field of num bits`|
 |`^type`|A `pointer to type`|
 |`?`|A `unknown type(among other thing, this code is used for function pointers)`|
-
+### add
 
 
 #### 最后一步
