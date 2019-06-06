@@ -67,7 +67,13 @@ void functionForMethod1(id self, SEL _cmd) {
 //    Car* car = [[Car alloc] init];
 //    [car performSelector:@selector(fly)];
     //[self performSelector:@selector(testMethod)];
-    [self testForwarding];
+    
+    
+    
+    int a[5] = {1, 2, 3, 4};
+    int *b = a;
+    printf("%s",@encode(b));
+    
 }
 
 - (void) testForwarding {

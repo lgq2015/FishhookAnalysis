@@ -457,6 +457,12 @@ void functionForMethod1(id self, SEL _cmd) {
 ```
 
 #### `Type Encoding`
+```
+char *buf1 = @encode(int **);
+char *buf2 = @encode(struct key);
+char *buf3 = @encode(Rectangle);
+```
+
 
 | `Code`| `Meaning`      
 |-|:-------------:|
@@ -478,13 +484,13 @@ void functionForMethod1(id self, SEL _cmd) {
 |`@`|An `object(wheter statically typed or typed id)`|
 |`#`|An `class object(Class)`|
 |`:`|A `method selector(SEL)`|
-|`[array type]`|An `array`|sasasa
+|`[array type]`|An `array`|
 |`{name = type}`|An `struct`|
 |`(name = type)`|An `union`|
 |`bnum`|A `bit field of num bits`|
 |`^type`|A `pointer to type`|
 |`?`|A `unknown type(among other thing, this code is used for function pointers)`|
-### add
+
 
 
 #### 最后一步
